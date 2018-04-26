@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.nilhcem.androidthings.driver.wsepd.BitmapHelper;
+import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
+import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
 
 import java.io.IOException;
 
@@ -27,7 +29,7 @@ public class SampleActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-            display = EPaperDisplay.Factory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, EPaperDisplay.DeviceType.Preset.EPD2X9.deviceType);
+            display = EPaperDisplayFactory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, DeviceType.Preset.EPD7X5B.deviceType);
 
             // Clear screen
             display.clear();
@@ -40,7 +42,7 @@ public class SampleActivity extends Activity {
 
             // Draw a black-on-white bitmap
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.android);
-            display.setPixels(BitmapHelper.bmpToBytes(bmp));
+            display.setPixels(BitmapHelper.bmpToGrayscaleBytes(bmp));
             display.refresh();
         } catch (IOException | InterruptedException e) {
             Log.e(TAG, "Error initializing display", e);

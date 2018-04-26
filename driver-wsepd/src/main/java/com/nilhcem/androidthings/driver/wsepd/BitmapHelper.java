@@ -1,6 +1,12 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+
+import java.nio.ByteBuffer;
 
 public class BitmapHelper {
 
@@ -35,4 +41,22 @@ public class BitmapHelper {
         }
         return pixels;
     }
+
+    public static byte[] bmpToGrayscaleBytes(Bitmap bitmap) {
+        final Bitmap bm = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+        final Canvas c = new Canvas(bm);
+        final Paint paint = new Paint();
+        final ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        final ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bitmap, 0, 0, paint);
+
+        final int bufferSize = bm.getRowBytes() * bm.getHeight();
+        final ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+        bm.copyPixelsToBuffer(byteBuffer);
+        bm.recycle();
+        return byteBuffer.array();
+    }
+
 }

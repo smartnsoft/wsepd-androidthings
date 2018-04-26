@@ -5,10 +5,7 @@ import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
 
-public class EPaperDisplayWaveshare implements EPaperDisplay {
-
-    private static final boolean DC_COMMAND = false;
-    private static final boolean DC_DATA = true;
+public class EPaperDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     private static final byte CMD_DRIVER_OUTPUT_CONTROL = 0x01;
     private static final byte CMD_BOOSTER_SOFT_START_CONTROL = 0x0c;
@@ -30,43 +27,18 @@ public class EPaperDisplayWaveshare implements EPaperDisplay {
     private static final byte CMD_SET_RAM_Y_ADDRESS_COUNTER = 0x4f;
     private static final byte CMD_EMPTY_COMMAND = (byte) 0xff;
 
-    private final SpiDevice spiDevice;
-    private final Gpio busyGpio;
-    private final Gpio rstGpio;
-    private final Gpio dcGpio;
-    private final DeviceType specs;
-
-    private final byte[] buffer;
-
     EPaperDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType) throws IOException {
-        this.spiDevice = spiDevice;
-        this.busyGpio = busyGpio;
-        this.rstGpio = rstGpio;
-        this.dcGpio = dcGpio;
-        this.specs = deviceType;
-
-        int xSize = ((specs.xDot % 8 == 0) ? specs.xDot : specs.xDot + (8 - specs.xDot % 8)) / 8;
-        buffer = new byte[xSize * specs.yDot];
-
-        init();
+        super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType);
     }
 
-    private void init() throws IOException {
-        spiDevice.setMode(SpiDevice.MODE0);
-        spiDevice.setFrequency(2_000_000); // max speed: 2MHz
-        spiDevice.setBitsPerWord(8);
-        spiDevice.setBitJustification(false); // MSB first
-        spiDevice.setCsChange(false);
+    @Override
+    protected byte[] createBuffer() {
+        int xSize = ((specs.xDot % 8 == 0) ? specs.xDot : specs.xDot + (8 - specs.xDot % 8)) / 8;
+        return new byte[xSize * specs.yDot];
+    }
 
-        busyGpio.setDirection(Gpio.DIRECTION_IN);
-        busyGpio.setActiveType(Gpio.ACTIVE_HIGH);
-
-        rstGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
-        rstGpio.setActiveType(Gpio.ACTIVE_HIGH);
-
-        dcGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-        dcGpio.setActiveType(Gpio.ACTIVE_HIGH);
-
+    @Override
+    protected void init() throws IOException {
         // Initialize display
         resetDriver();
         sendCommand(CMD_DRIVER_OUTPUT_CONTROL, new byte[]{(byte) ((specs.yDot - 1) % 256), (byte) ((specs.yDot - 1) / 256), (byte) 0x00}); // Panel configuration, Gate selection
@@ -124,15 +96,8 @@ public class EPaperDisplayWaveshare implements EPaperDisplay {
         dcGpio.close();
     }
 
-    private void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void busyWait() throws IOException {
+    @Override
+    protected void busyWait() throws IOException {
         for (int i = 0; i < 400; i++) {
             if (!busyGpio.getValue()) {
                 break;
@@ -141,36 +106,4 @@ public class EPaperDisplayWaveshare implements EPaperDisplay {
         }
     }
 
-    private void sendCommand(byte command) throws IOException {
-        sendCommand(command, null);
-    }
-
-    private void sendCommand(byte command, /*Nullable*/ byte[] data) throws IOException {
-        sendCommand(command, data, true);
-    }
-
-    private void sendCommand(byte command, /*Nullable*/ byte[] data, boolean singleWrite) throws IOException {
-        // Send command
-        dcGpio.setValue(DC_COMMAND);
-        spiDevice.write(new byte[]{command}, 1);
-
-        // Send data
-        if (data != null) {
-            dcGpio.setValue(DC_DATA);
-
-            if (singleWrite) {
-                spiDevice.write(data, data.length);
-            } else {
-                for (byte b : data) {
-                    spiDevice.write(new byte[]{b}, 1);
-                }
-            }
-        }
-    }
-
-    private void resetDriver() throws IOException {
-        rstGpio.setValue(false);
-        sleep(100);
-        rstGpio.setValue(true);
-    }
 }
