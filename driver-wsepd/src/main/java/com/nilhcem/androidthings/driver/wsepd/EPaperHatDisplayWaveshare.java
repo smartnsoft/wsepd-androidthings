@@ -70,9 +70,9 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         sendCommand(CMD_VCOM_AND_DATA_INTERVAL_SETTING, new byte[]{(0x77)});
         sendCommand(CMD_TCON_SETTING, new byte[]{(0x22)});
         sendCommand(CMD_TCON_RESOLUTION, new byte[]{
-                (0x02),     //source 640
+                0x02,     //source 640
                 (byte) 0x80,
-                (0x01),     //gate 384
+                0x01,     //gate 384
                 (byte) 0x80
         });
         sendCommand(CMD_VCM_DC_SETTING, new byte[]{
@@ -87,7 +87,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     @Override
     public void clear() throws IOException {
         for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = (byte) 0xff;
+            buffer[i] = (byte) 0x44;
         }
         setPixels(buffer);
     }
@@ -171,13 +171,6 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    void resetDriver() throws IOException {
-        rstGpio.setValue(false);
-        sleep(200);
-        rstGpio.setValue(true);
-    }
-
-    @Override
     protected void busyWait() throws IOException {
         while (!busyGpio.getValue()) {
             sleep(100);
@@ -185,10 +178,18 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
+    void resetDriver() throws IOException {
+        rstGpio.setValue(false);
+        sleep(200);
+        rstGpio.setValue(true);
+        sleep(200);
+    }
+
+    @Override
     public void refresh() throws IOException {
         turnDisplayOn();
         busyWait();
-        sendCommand(DATA_START_TRANSMISSION_1, buffer);
+        sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
         sendCommand(DISPLAY_REFRESH);
         sleep(100);
         busyWait();
