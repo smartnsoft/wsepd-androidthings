@@ -44,11 +44,11 @@ class PixelBuffer {
 
     void setPixel(int x, int y, PaletteImage.Palette color) {
         if (x < 0 || x >= getOrientatedWidth()) {
-            Log.v("InkyPhat", "Attempt to draw outside of X bounds (x:" + x + " y:" + y + ") Max X is " + getOrientatedWidth());
+            Log.v("PixelBuffer", "Attempt to draw outside of X bounds (x:" + x + " y:" + y + ") Max X is " + getOrientatedWidth());
             return;
         }
         if (y < 0 || y >= getOrientatedHeight()) {
-            Log.v("InkyPhat", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ") Max Y is " + getOrientatedHeight());
+            Log.v("PixelBuffer", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ") Max Y is " + getOrientatedHeight());
             return;
         }
 
@@ -101,11 +101,20 @@ class PixelBuffer {
     private byte[] mapPaletteArrayToDisplayByteArray(PaletteImage.Palette[] palette) {
         byte[] display = new byte[this.numberOfPixelRegions];
 
-        for (int index = 0; index < palette.length-1; index += 2) {
+        for (int index = 0; index < palette.length - 1; index += 2) {
 
             final PaletteImage.Palette firstPixel = palette[index];
             final PaletteImage.Palette secondPixel = palette[index + 1];
-            display[index/2] = (byte) (firstPixel.getByteColor() << 4 | secondPixel.getByteColor());
+
+            if (firstPixel != null && secondPixel != null) {
+                display[index / 2] = (byte) (firstPixel.getByteColor() << 4 | secondPixel.getByteColor());
+            } else if (firstPixel != null) {
+                display[index / 2] = (byte) (firstPixel.getByteColor() << 4);
+            } else if (secondPixel != null) {
+                display[index / 2] = (byte) (secondPixel.getByteColor());
+            } else {
+                display[index / 2] = (byte) (PaletteImage.Palette.WHITE.getByteColor() << 4 | PaletteImage.Palette.WHITE.getByteColor());
+            }
         }
 
         return display;

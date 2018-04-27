@@ -55,7 +55,22 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
     @Override
     public void setPixels(Bitmap bitmap) throws IOException {
-        
+
+    }
+
+    @Override
+    public void setPixels(String text) throws IOException {
+
+    }
+
+    @Override
+    public void setPixels(byte[] pixels) throws IOException {
+
+    }
+
+    @Override
+    public void setPixels(ImageConverter.TextWrapper text) throws IOException {
+
     }
 
     void sendCommand(byte command) throws IOException {

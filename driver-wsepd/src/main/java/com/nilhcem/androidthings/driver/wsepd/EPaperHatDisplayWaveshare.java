@@ -122,8 +122,21 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     public void setPixels(Bitmap bitmap) throws IOException {
-        final PaletteImage paletteImage = imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y);
-        pixelBuffer.setImage(0, 0, paletteImage);
+        setPixels(imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y), 0, 0);
+    }
+
+    @Override
+    public void setPixels(ImageConverter.TextWrapper text) throws IOException {
+        setPixels(imageConverter.convertText(text.text, text.textSize, text.textColor), 0, 0);
+    }
+
+    @Override
+    public void setPixels(String text) throws IOException {
+        setPixels(imageConverter.convertText(new ImageConverter.TextWrapper(text)), 0, 0);
+    }
+
+    private void setPixels(final PaletteImage paletteImage, int x, int y) {
+        pixelBuffer.setImage(x, y, paletteImage);
         byte[] pixels = pixelBuffer.getDisplayPixels();
         System.arraycopy(pixels, 0, buffer, 0, Math.min(pixels.length, buffer.length));
     }
@@ -210,29 +223,5 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         busyWait();
         turnDisplayOff();
     }
-
-//    def get_frame_buffer(self, image):
-//    buf = [0x00] * (self.width * self.height / 4)
-//            # Set buffer to value of Python Imaging Library image.
-//        # Image must be in mode L.
-//    image_grayscale = image.convert('L')
-//    imwidth, imheight = image_grayscale.size
-//        if imwidth != self.width or imheight != self.height:
-//    raise ValueError('Image must be same dimensions as display \
-//                             ({0}x{1}).' .format(self.width, self.height))
-//
-//    pixels = image_grayscale.load()
-//            for y in range(self.height):
-//            for x in range(self.width):
-//            # Set the bits for the column of pixels at the current position.
-//            if pixels[x, y] < 64:           # black
-//    buf[(x + y * self.width) / 4] &= ~(0xC0 >> (x % 4 * 2))
-//    elif pixels[x, y] < 192:     # convert gray to red
-//    buf[(x + y * self.width) / 4] &= ~(0xC0 >> (x % 4 * 2))
-//    buf[(x + y * self.width) / 4] |= 0x40 >> (x % 4 * 2)
-//            else:                           # white
-//    buf[(x + y * self.width) / 4] |= 0xC0 >> (x % 4 * 2)
-//            return buf
-
 
 }

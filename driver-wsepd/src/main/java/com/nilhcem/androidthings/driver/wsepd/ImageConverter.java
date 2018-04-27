@@ -2,6 +2,7 @@ package com.nilhcem.androidthings.driver.wsepd;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.Size;
@@ -9,7 +10,27 @@ import android.util.Size;
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;
 
-class ImageConverter {
+public class ImageConverter {
+
+    public static class TextWrapper {
+        final int textColor;
+        final int textSize;
+        final String text;
+
+        public TextWrapper(int textColor, int textSize, String text) {
+            this.textColor = textColor;
+            this.textSize = textSize;
+            this.text = text;
+        }
+
+        public TextWrapper(int textColor, String text) {
+            this(textColor, 20, text);
+        }
+
+        public TextWrapper(String text) {
+            this(Color.BLACK, 20, text);
+        }
+    }
 
     enum Orientation {
         LANDSCAPE, PORTRAIT
@@ -44,10 +65,10 @@ class ImageConverter {
     }
 
     Bitmap filterImage(Bitmap sourceBitmap, ImageScaler.Scale scale) {
-        return scaleToInkyPhatBounds(sourceBitmap, scale);
+        return scaleToScreenBounds(sourceBitmap, scale);
     }
 
-    private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, ImageScaler.Scale scale) {
+    private Bitmap scaleToScreenBounds(Bitmap sourceBitmap, ImageScaler.Scale scale) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (bitmapWidth < getOrientatedWidth() && bitmapHeight < getOrientatedHeight()) {
@@ -74,6 +95,14 @@ class ImageConverter {
 
     private boolean isIn(Orientation orientation) {
         return this.orientation == orientation;
+    }
+
+    public PaletteImage convertText(String text, int textSize, int color) {
+        return convertImage(textAsBitmap(text, textSize, color), ImageScaler.Scale.FIT_X_OR_Y);
+    }
+
+    public PaletteImage convertText(TextWrapper text) {
+        return convertImage(textAsBitmap(text.text, text.textSize, text.textColor), ImageScaler.Scale.FIT_X_OR_Y);
     }
 
     public PaletteImage convertText(String text, int color) {

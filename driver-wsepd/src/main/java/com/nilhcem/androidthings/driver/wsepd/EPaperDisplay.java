@@ -12,6 +12,10 @@ public interface EPaperDisplay extends AutoCloseable {
 
     void setPixels(Bitmap bitmap) throws IOException;
 
+    void setPixels(String text) throws IOException;
+
+    void setPixels(ImageConverter.TextWrapper text) throws IOException;
+
     void refresh() throws IOException;
 
     @Override

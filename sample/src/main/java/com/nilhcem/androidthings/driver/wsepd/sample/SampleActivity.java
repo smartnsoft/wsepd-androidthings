@@ -3,12 +3,14 @@ package com.nilhcem.androidthings.driver.wsepd.sample;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter;
 
 import java.io.IOException;
 
@@ -34,9 +36,9 @@ public class SampleActivity extends Activity {
 //            display.clear();
             //Thread.sleep(1000);
 
-            // Draw waveshare logo
-            //display.setPixels(SampleData.WAVESHARE_LOGO);
+
             Log.d(TAG, "Refreshing");
+//            display.setPixels(new ImageConverter.TextWrapper(Color.BLACK, 50, "Hello world !"));
 //            display.refresh();
             Log.d(TAG, "Refreshed !");
             Thread.sleep(1000);
