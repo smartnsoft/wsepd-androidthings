@@ -98,10 +98,7 @@ public class EPaperDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     protected void busyWait() throws IOException {
-        for (int i = 0; i < 400; i++) {
-            if (!busyGpio.getValue()) {
-                break;
-            }
+        while (busyGpio.getValue()) {
             sleep(100);
         }
     }

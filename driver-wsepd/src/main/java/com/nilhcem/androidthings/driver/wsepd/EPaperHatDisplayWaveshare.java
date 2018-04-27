@@ -51,11 +51,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     protected byte[] createBuffer() {
-        if (specs != DeviceType.Preset.EPD7X5.deviceType) {
-            return new byte[specs.xDot / 4 * specs.yDot];
-        } else {
-            return new byte[30720];
-        }
+        return new byte[specs.xDot / 2 * specs.yDot];
     }
 
     @Override
@@ -94,6 +90,17 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
             buffer[i] = (byte) 0xff;
         }
         setPixels(buffer);
+    }
+
+    private void turnDisplayOn() throws IOException {
+        init();
+    }
+
+    private void turnDisplayOff() throws IOException {
+        busyWait();
+        sendCommand(CMD_POWER_OFF);
+        busyWait();
+        sendCommand(DEEP_SLEEP, new byte[]{(byte) 0xa5});
     }
 
     @Override
@@ -164,38 +171,28 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
+    void resetDriver() throws IOException {
+        rstGpio.setValue(false);
+        sleep(200);
+        rstGpio.setValue(true);
+    }
+
+    @Override
     protected void busyWait() throws IOException {
-        for (int i = 0; i < 400; i++) {
-            if (busyGpio.getValue()) {
-                break;
-            }
+        while (!busyGpio.getValue()) {
             sleep(100);
         }
     }
 
-    /*
-    ##
-     #  @brief: update the display
-     #          there are 2 memory areas embedded in the e-paper display
-     #          but once this function is called,
-     #          the the next action of SetFrameMemory or ClearFrame will
-     #          set the other memory area.
-     ##
-    def display_frame(self):
-        self.send_command(DISPLAY_UPDATE_CONTROL_2)
-        self.send_data(0xC4)
-        self.send_command(MASTER_ACTIVATION)
-        self.send_command(TERMINATE_FRAME_READ_WRITE)
-        self.wait_until_idle()
-     */
     @Override
     public void refresh() throws IOException {
+        turnDisplayOn();
         busyWait();
         sendCommand(DATA_START_TRANSMISSION_1, buffer);
         sendCommand(DISPLAY_REFRESH);
         sleep(100);
         busyWait();
-
+        turnDisplayOff();
     }
 
 //    def get_frame_buffer(self, image):
