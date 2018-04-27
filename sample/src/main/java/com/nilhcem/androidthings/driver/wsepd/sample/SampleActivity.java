@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.nilhcem.androidthings.driver.wsepd.BitmapHelper;
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
@@ -28,26 +27,26 @@ public class SampleActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.e(TAG, "COUCOU");
-
         try {
             display = EPaperDisplayFactory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, DeviceType.Preset.EPD7X5B.deviceType);
 
             // Clear screen
-            display.clear();
+//            display.clear();
             //Thread.sleep(1000);
 
             // Draw waveshare logo
             //display.setPixels(SampleData.WAVESHARE_LOGO);
             Log.d(TAG, "Refreshing");
-            display.refresh();
+//            display.refresh();
             Log.d(TAG, "Refreshed !");
             Thread.sleep(1000);
 
             // Draw a black-on-white bitmap
-            //Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.android);
-            //display.setPixels(BitmapHelper.bmpToGrayscaleBytes(bmp));
-            //display.refresh();
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
+            display.setPixels(bmp);
+            display.refresh();
+            Thread.sleep(1000);
+
         } catch (IOException | InterruptedException e) {
             Log.e(TAG, "Error initializing display", e);
         }

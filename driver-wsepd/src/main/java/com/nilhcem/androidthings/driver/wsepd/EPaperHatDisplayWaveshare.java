@@ -1,5 +1,7 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
+import android.graphics.Bitmap;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 
@@ -45,8 +47,13 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     private static final byte READ_VCOM_VALUE = (byte) 0x81;
     private static final byte CMD_VCM_DC_SETTING = (byte) 0x82;
 
+    private PixelBuffer pixelBuffer;
+    private ImageConverter imageConverter;
+
     EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType) throws IOException {
         super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType);
+        pixelBuffer = new PixelBuffer(deviceType, ImageConverter.Orientation.PORTRAIT);
+        imageConverter = new ImageConverter(deviceType, ImageConverter.Orientation.PORTRAIT);
     }
 
     @Override
@@ -87,7 +94,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     @Override
     public void clear() throws IOException {
         for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = (byte) 0x44;
+            buffer[i] = (byte) 0x33;
         }
         setPixels(buffer);
     }
@@ -111,6 +118,14 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         } else {
             setPixelsOnMonochromeDisplay(pixels);
         }
+    }
+
+    @Override
+    public void setPixels(Bitmap bitmap) throws IOException {
+        final PaletteImage paletteImage = imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y);
+        pixelBuffer.setImage(0, 0, paletteImage);
+        byte[] pixels = pixelBuffer.getDisplayPixels();
+        System.arraycopy(pixels, 0, buffer, 0, Math.min(pixels.length, buffer.length));
     }
 
     private void setPixelsOnColoredDisplay(byte[] pixels) {

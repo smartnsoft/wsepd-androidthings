@@ -1,5 +1,7 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
+import android.graphics.Bitmap;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 
@@ -50,6 +52,11 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
     protected abstract byte[] createBuffer();
 
     protected abstract void busyWait() throws IOException;
+
+    @Override
+    public void setPixels(Bitmap bitmap) throws IOException {
+        
+    }
 
     void sendCommand(byte command) throws IOException {
         sendCommand(command, null);
