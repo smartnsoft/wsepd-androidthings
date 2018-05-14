@@ -1,6 +1,9 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.view.View;
+import android.view.View.MeasureSpec;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
@@ -126,6 +129,11 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
+    public void setPixels(View view) throws IOException {
+        setPixels(loadBitmapFromView(view));
+    }
+
+    @Override
     public void setPixels(ImageConverter.TextWrapper text) throws IOException {
         setPixels(imageConverter.convertText(text.text, text.textSize, text.textColor), 0, 0);
     }
@@ -222,6 +230,18 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         sleep(100);
         busyWait();
         turnDisplayOff();
+    }
+
+
+    private Bitmap loadBitmapFromView(View v) {
+        int specWidth = MeasureSpec.makeMeasureSpec(this.specs.xDot, MeasureSpec.EXACTLY);
+        int specHeight = MeasureSpec.makeMeasureSpec(this.specs.yDot, MeasureSpec.EXACTLY);
+        v.measure(specWidth, specHeight);
+        Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+        v.draw(c);
+        return b;
     }
 
 }
