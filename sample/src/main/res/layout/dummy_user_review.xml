@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#FFFFFF"
+>
+
+  <android.support.constraint.Guideline
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/verticalGuideline"
+    app:layout_constraintGuide_percent=".4"
+    android:orientation="vertical"/>
+
+  <android.support.constraint.Guideline
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/verticalMarginGuideline"
+    app:layout_constraintGuide_percent=".45"
+    android:orientation="vertical"/>
+
+  <android.support.constraint.Guideline
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/verticalMarginGuidelineRight"
+    app:layout_constraintGuide_percent=".95"
+    android:orientation="vertical"/>
+
+  <android.support.constraint.Guideline
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/horizontalGuideline"
+    app:layout_constraintGuide_percent=".4"
+    android:orientation="horizontal"/>
+
+  <TextView
+    android:id="@+id/noteTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/note"
+    app:layout_constraintVertical_chainStyle="packed"
+    android:text="@string/user_reviews"
+    android:textSize="12dp"
+    android:textColor="@color/black"
+  />
+  
+  <TextView
+    android:id="@+id/note"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/noteTitle"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toLeftOf="@id/noteMax"
+    app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline"
+    app:layout_constraintHorizontal_chainStyle="packed"
+    android:text="4"
+    android:textSize="57dp"
+    android:textStyle="bold"
+    android:textColor="@color/yellow"
+  />
+
+  <TextView
+    android:id="@+id/noteMax"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/noteTitle"
+    app:layout_constraintLeft_toRightOf="@id/note"
+    app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+    app:layout_constraintBaseline_toBaselineOf="@id/note"
+    android:text="/5"
+    android:textSize="27dp"
+    android:textColor="@color/yellow"
+  />
+
+  <TextView
+    android:layout_width="0dp"
+    android:layout_height="2dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+    app:layout_constraintTop_toTopOf="@id/horizontalGuideline"
+    android:background="@color/black"
+  />
+
+  <TextView
+    android:layout_width="2dp"
+    android:layout_height="0dp"
+    app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:background="@color/black"
+  />
+
+  <TextView
+    android:id="@+id/commentTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBaseline_toBaselineOf="@id/noteTitle"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    android:text="@string/most_recent_review"
+    android:textSize="12dp"
+    android:textColor="@color/black"
+  />
+
+  <TextView
+    android:id="@+id/commentName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    app:layout_constraintTop_toBottomOf="@id/commentTitle"
+    app:layout_constraintBottom_toTopOf="@id/commentDate"
+    android:text="@string/dummy_first_name"
+    android:textSize="18dp"
+    android:textStyle="bold"
+    android:textColor="@color/black"
+  />
+
+  <TextView
+    android:id="@+id/commentDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    app:layout_constraintTop_toBottomOf="@id/commentName"
+    app:layout_constraintBottom_toTopOf="@id/ratingBar"
+    android:text="@string/dummy_published_date"
+    android:textSize="10dp"
+    android:textColor="@color/black"
+  />
+
+  <com.willy.ratingbar.BaseRatingBar
+    android:id="@+id/ratingBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    app:layout_constraintTop_toBottomOf="@id/commentDate"
+    app:layout_constraintBottom_toTopOf="@id/title"
+    app:srb_drawableFilled="@drawable/ic_star_full"
+    app:srb_drawableEmpty="@drawable/ic_star_empty"
+    app:srb_starWidth="25dp"
+    app:srb_starHeight="25dp"
+    app:srb_starPadding="2dp"
+    app:srb_numStars="5"
+    app:srb_rating="4"
+  />
+
+  <TextView
+    android:id="@+id/title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    app:layout_constraintRight_toLeftOf="@id/verticalMarginGuidelineRight"
+    app:layout_constraintTop_toBottomOf="@id/ratingBar"
+    app:layout_constraintBottom_toTopOf="@id/description"
+    android:text="@string/sample_title"
+    android:textStyle="bold"
+    android:textSize="16dp"
+  />
+
+  <TextView
+    android:id="@+id/description"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/verticalMarginGuideline"
+    app:layout_constraintRight_toLeftOf="@id/verticalMarginGuidelineRight"
+    app:layout_constraintTop_toBottomOf="@id/title"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:text="@string/sample_description"
+    android:textStyle="bold"
+    android:textSize="13dp"
+  />
+
+  <LinearLayout
+    android:id="@+id/informations"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/horizontalGuideline"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+    android:orientation="vertical"
+  />
+
+
+  
+
+</android.support.constraint.ConstraintLayout>

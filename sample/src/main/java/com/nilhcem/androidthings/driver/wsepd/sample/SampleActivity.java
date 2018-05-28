@@ -3,11 +3,11 @@ package com.nilhcem.androidthings.driver.wsepd.sample;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
@@ -27,6 +27,7 @@ public class SampleActivity
 
     // when using same pins as the hat but changing reset GPIO from pin 11 to pin 15
     public static final ScreenPinout imx7d = new ScreenPinout("SPI3.1", "GPIO6_IO12", "GPIO1_IO10", "GPIO5_IO00");
+
 
     private final String spiName;
 
@@ -76,14 +77,19 @@ public class SampleActivity
 
       Log.d(TAG, "Refreshing");
       // Draw a black-on-white bitmap
-      final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
-      display.setPixels(bmp);
+
+      final View root = getLayoutInflater().inflate(R.layout.dummy_user_review, null, false);
+      final ViewGroup informationLayout = root.findViewById(R.id.informations);
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Quality", 4.55f));
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Price", 3.15f));
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
+      display.setPixels(root);
       display.refresh();
-      Thread.sleep(1000);
+
       Log.d(TAG, "Refreshed !");
 
     }
-    catch (IOException | InterruptedException e)
+    catch (IOException e)
     {
       Log.e(TAG, "Error initializing display", e);
     }
@@ -103,4 +109,5 @@ public class SampleActivity
       Log.e(TAG, "Error closing display", e);
     }
   }
+
 }

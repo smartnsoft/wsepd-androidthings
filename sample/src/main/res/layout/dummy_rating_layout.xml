@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="5dp"
+  android:layout_marginBottom="5dp"
+>
+
+  <TextView
+    android:id="@+id/informationTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/information_title"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintVertical_chainStyle="packed"
+    app:layout_constraintBottom_toTopOf="@id/informationRatingBar"
+  />
+
+  <com.willy.ratingbar.BaseRatingBar
+    android:id="@+id/informationRatingBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/informationTitle"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:srb_drawableFilled="@drawable/ic_rectangle_full"
+    app:srb_drawableEmpty="@drawable/ic_rectangle_empty"
+    app:srb_drawableFilledFirst="@drawable/ic_rectangle_left_full"
+    app:srb_drawableEmptyLast="@drawable/ic_rectangle_right_empty"
+    app:srb_starWidth="28dp"
+    app:srb_starHeight="12dp"
+    app:srb_starPadding="1dp"
+    app:srb_numStars="5"
+    app:srb_rating="4"
+  />
+
+</android.support.constraint.ConstraintLayout>

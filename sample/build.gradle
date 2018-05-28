@@ -16,4 +16,7 @@ android {
 dependencies {
     compileOnly rootProject.ext.dependencies['androidthings']
     implementation project(':driver-wsepd')
+    implementation("com.android.support.constraint:constraint-layout:1.1.0")
+    implementation("com.android.support:support-v4:27.1.1")
+    implementation("com.github.smartnsoft:SimpleRatingBar:1.6.1")
 }
