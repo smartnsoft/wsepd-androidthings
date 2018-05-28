@@ -2,27 +2,16 @@ package com.nilhcem.androidthings.driver.wsepd.sample;
 
 import java.io.IOException;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
-
-import java.io.IOException;
 
 public class SampleActivity
     extends Activity
@@ -34,7 +23,6 @@ public class SampleActivity
   {
 
     public static final ScreenPinout raspberry = new ScreenPinout("SPI0.0", "BCM24", "BCM17", "BCM25");
-    //imx7d("SPI3.1", "GPIO6_IO12", "BCM17", "BCM25"),
 
     private final String spiName;
 
@@ -55,9 +43,10 @@ public class SampleActivity
 
   private EPaperDisplay display;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
 
     try
     {
@@ -80,24 +69,18 @@ public class SampleActivity
       Log.d(TAG, "Refreshing");
       // Draw a black-on-white bitmap
 
-      final View root = getLayoutInflater().inflate(R.layout.test, null, false);
-      ((ViewGroup) root.findViewById(R.id.informations)).addView(new InformationLayout(getApplicationContext(), "Qualité", 3.65f));
-      ((ViewGroup) root.findViewById(R.id.informations)).addView(new InformationLayout(getApplicationContext(), "Prix", 2.15f));
-      try
-      {
-        display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5B.deviceType);
-        display.setPixels(root);
-        display.refresh();
-      }
-      catch (IOException e)
-      {
-        e.printStackTrace();
-      }
+      final View root = getLayoutInflater().inflate(R.layout.dummy_user_review, null, false);
+      final ViewGroup informationLayout = root.findViewById(R.id.informations);
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Quality", 4.55f));
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Price", 3.15f));
+      informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
+      display.setPixels(root);
+      display.refresh();
 
       Log.d(TAG, "Refreshed !");
 
     }
-    catch (IOException | InterruptedException e)
+    catch (IOException e)
     {
       Log.e(TAG, "Error initializing display", e);
     }

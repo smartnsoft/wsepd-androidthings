@@ -6,4 +6,8 @@
     exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </string>
   <string name="information_title">Information 1</string>
+  <string name="user_reviews">User reviews</string>
+  <string name="dummy_first_name">Chloe</string>
+  <string name="dummy_published_date">24th march 2018</string>
+  <string name="most_recent_review">Most recent review</string>
 </resources>

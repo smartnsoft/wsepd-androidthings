@@ -50,7 +50,7 @@ public class InformationLayout
 
   private void init()
   {
-    inflate(getContext(), R.layout.information_layout, this);
+    inflate(getContext(), R.layout.dummy_rating_layout, this);
     ((TextView)findViewById(R.id.informationTitle)).setText(title);
     ((BaseRatingBar)findViewById(R.id.informationRatingBar)).setRating(note);
   }
