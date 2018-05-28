@@ -69,7 +69,7 @@ public class SampleActivity
         screenPinout = null;
       }
 
-      display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5B.deviceType);
+      display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5C);
 
       // Clear screen
       // display.clear();
@@ -85,7 +85,6 @@ public class SampleActivity
       informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
       display.setPixels(root);
       display.refresh();
-
       Log.d(TAG, "Refreshed !");
 
     }

@@ -40,12 +40,14 @@ public class ImageConverter {
     private final Orientation orientation;
     private final ImageScaler imageScaler;
     private final ColorConverter colorConverter;
+    private final boolean isBlackAndWhiteOnly;
 
     ImageConverter(DeviceType specs, Orientation orientation) {
         this.orientation = orientation;
         this.imageScaler = new ImageScaler();
         this.colorConverter = new ColorConverter();
         this.displaySize = new Size(specs.xDot, specs.yDot);
+        this.isBlackAndWhiteOnly = specs.isBlackAndWhiteOnly;
     }
 
     PaletteImage convertImage(Bitmap input, ImageScaler.Scale scale) {
@@ -59,7 +61,7 @@ public class ImageConverter {
         input.getPixels(pixels, 0, width, 0, 0, width, height);
         PaletteImage.Palette[] colors = new PaletteImage.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
-            colors[i] = colorConverter.convertARBG888Color(pixels[i]);
+            colors[i] = colorConverter.convertARBG888Color(pixels[i], isBlackAndWhiteOnly);
         }
         return new PaletteImage(colors, width);
     }

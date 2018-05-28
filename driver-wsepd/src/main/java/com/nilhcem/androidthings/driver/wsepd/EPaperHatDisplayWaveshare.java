@@ -1,5 +1,7 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
+import java.io.IOException;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
@@ -7,8 +9,6 @@ import android.view.View.MeasureSpec;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
-
-import java.io.IOException;
 
 public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
@@ -116,7 +116,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     @Override
     public void setPixels(byte[] pixels) throws IOException {
         busyWait();
-        if (specs != DeviceType.Preset.EPD7X5.deviceType) {
+        if (!specs.isBlackAndWhiteOnly) {
             setPixelsOnColoredDisplay(pixels);
         } else {
             setPixelsOnMonochromeDisplay(pixels);

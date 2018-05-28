@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 class ColorConverter {
 
-    PaletteImage.Palette convertARBG888Color(int color) {
+    PaletteImage.Palette convertARBG888Color(int color, boolean blackAndWhiteOnly) {
         int red = Color.red(color);
         int blue = Color.blue(color);
         int green = Color.green(color);
@@ -13,7 +13,7 @@ class ColorConverter {
             return PaletteImage.Palette.WHITE;
         }
 
-        if (red > 127) {
+        if (red > 127 && !blackAndWhiteOnly) {
             return PaletteImage.Palette.COLORED;
         }
 
