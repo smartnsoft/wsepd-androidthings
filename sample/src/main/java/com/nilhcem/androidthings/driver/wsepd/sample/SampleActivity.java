@@ -22,8 +22,11 @@ public class SampleActivity
   public static class ScreenPinout
   {
 
+    // when plugging the hat on the raspberry
     public static final ScreenPinout raspberry = new ScreenPinout("SPI0.0", "BCM24", "BCM17", "BCM25");
-    //imx7d("SPI3.1", "GPIO6_IO12", "BCM17", "BCM25"),
+
+    // when using same pins as the hat but changing reset GPIO from pin 11 to pin 15
+    public static final ScreenPinout imx7d = new ScreenPinout("SPI3.1", "GPIO6_IO12", "GPIO1_IO10", "GPIO5_IO00");
 
     private final String spiName;
 
@@ -55,6 +58,10 @@ public class SampleActivity
       if (Build.BOARD.equals("rpi3"))
       {
         screenPinout = ScreenPinout.raspberry;
+      }
+      else if (Build.BOARD.equals("imx7d"))
+      {
+        screenPinout = ScreenPinout.imx7d;
       }
       else
       {
