@@ -233,15 +233,15 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
 
-    private Bitmap loadBitmapFromView(View v) {
-        int specWidth = MeasureSpec.makeMeasureSpec(this.specs.xDot, MeasureSpec.EXACTLY);
-        int specHeight = MeasureSpec.makeMeasureSpec(this.specs.yDot, MeasureSpec.EXACTLY);
-        v.measure(specWidth, specHeight);
-        Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-        v.draw(c);
-        return b;
+    private Bitmap loadBitmapFromView(View view) {
+        final int specWidth = MeasureSpec.makeMeasureSpec(this.specs.xDot, MeasureSpec.EXACTLY);
+        final int specHeight = MeasureSpec.makeMeasureSpec(this.specs.yDot, MeasureSpec.EXACTLY);
+        view.measure(specWidth, specHeight);
+        final Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.draw(canvas);
+        return bitmap;
     }
 
 }
