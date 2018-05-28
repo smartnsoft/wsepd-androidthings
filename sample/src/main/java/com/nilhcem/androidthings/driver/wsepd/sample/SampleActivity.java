@@ -1,67 +1,99 @@
 package com.nilhcem.androidthings.driver.wsepd.sample;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
-import com.nilhcem.androidthings.driver.wsepd.ImageConverter;
 
-import java.io.IOException;
+public class SampleActivity
+    extends Activity
+{
 
-public class SampleActivity extends Activity {
+  private static final String TAG = SampleActivity.class.getSimpleName();
 
-    private static final String TAG = SampleActivity.class.getSimpleName();
+  public static class ScreenPinout
+  {
 
-    private static final String SPI_NAME = "SPI0.0";
-    private static final String BUSY_GPIO = "BCM24";
-    private static final String RESET_GPIO = "BCM17";
-    private static final String DC_GPIO = "BCM25";
+    public static final ScreenPinout raspberry = new ScreenPinout("SPI0.0", "BCM24", "BCM17", "BCM25");
+    //imx7d("SPI3.1", "GPIO6_IO12", "BCM17", "BCM25"),
 
-    private EPaperDisplay display;
+    private final String spiName;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private final String busyGPIO;
 
-        try {
-            display = EPaperDisplayFactory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, DeviceType.Preset.EPD7X5B.deviceType);
+    private final String resetGPIO;
 
-            // Clear screen
-//            display.clear();
-            //Thread.sleep(1000);
+    private final String dcGPIO;
 
-
-            Log.d(TAG, "Refreshing");
-//            display.setPixels(new ImageConverter.TextWrapper(Color.BLACK, 50, "Hello world !"));
-//            display.refresh();
-            Log.d(TAG, "Refreshed !");
-            Thread.sleep(1000);
-
-            // Draw a black-on-white bitmap
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
-            display.setPixels(bmp);
-            display.refresh();
-            Thread.sleep(1000);
-
-        } catch (IOException | InterruptedException e) {
-            Log.e(TAG, "Error initializing display", e);
-        }
+    ScreenPinout(String spiName, String busyGPIO, String resetGPIO, String dcGPIO)
+    {
+      this.spiName = spiName;
+      this.busyGPIO = busyGPIO;
+      this.resetGPIO = resetGPIO;
+      this.dcGPIO = dcGPIO;
     }
+  }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+  private EPaperDisplay display;
 
-        try {
-            display.close();
-        } catch (IOException e) {
-            Log.e(TAG, "Error closing display", e);
-        }
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+
+    try
+    {
+      final ScreenPinout screenPinout;
+      if (Build.BOARD.equals("rpi3"))
+      {
+        screenPinout = ScreenPinout.raspberry;
+      }
+      else
+      {
+        screenPinout = null;
+      }
+
+      display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5B.deviceType);
+
+      // Clear screen
+      // display.clear();
+      // Thread.sleep(1000);
+
+      Log.d(TAG, "Refreshing");
+      // Draw a black-on-white bitmap
+      final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
+      display.setPixels(bmp);
+      display.refresh();
+      Thread.sleep(1000);
+      Log.d(TAG, "Refreshed !");
+
     }
+    catch (IOException | InterruptedException e)
+    {
+      Log.e(TAG, "Error initializing display", e);
+    }
+  }
+
+  @Override
+  protected void onDestroy()
+  {
+    super.onDestroy();
+
+    try
+    {
+      display.close();
+    }
+    catch (IOException e)
+    {
+      Log.e(TAG, "Error closing display", e);
+    }
+  }
 }
