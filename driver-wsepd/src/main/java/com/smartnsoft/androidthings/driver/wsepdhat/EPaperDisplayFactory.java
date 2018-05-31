@@ -1,10 +1,10 @@
-package com.nilhcem.androidthings.driver.wsepd;
+package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.SpiDevice;
-import com.nilhcem.androidthings.driver.wsepd.DeviceType.Preset;
-import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
+import com.smartnsoft.androidthings.driver.wsepdhat.DeviceType.Preset;
+import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
 import java.io.IOException;
 

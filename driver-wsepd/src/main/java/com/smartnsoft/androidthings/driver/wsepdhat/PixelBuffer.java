@@ -1,11 +1,11 @@
-package com.nilhcem.androidthings.driver.wsepd;
+package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.util.Log;
 import android.util.Size;
 
 import java.util.Arrays;
 
-import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.LANDSCAPE;
+import static com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation.LANDSCAPE;
 
 class PixelBuffer {
 

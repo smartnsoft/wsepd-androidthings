@@ -1,4 +1,4 @@
-package com.nilhcem.androidthings.driver.wsepd;
+package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
-import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
-import com.nilhcem.androidthings.driver.wsepd.PaletteImage.Palette;
+import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
+import com.smartnsoft.androidthings.driver.wsepdhat.PaletteImage.Palette;
 
 import java.io.IOException;
 import java.util.Arrays;

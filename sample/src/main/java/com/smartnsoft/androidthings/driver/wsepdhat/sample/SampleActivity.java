@@ -1,4 +1,4 @@
-package com.nilhcem.androidthings.driver.wsepd.sample;
+package com.smartnsoft.androidthings.driver.wsepdhat.sample;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,12 +12,13 @@ import android.util.Log;
 import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nilhcem.androidthings.driver.wsepd.DeviceType;
-import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
-import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
-import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
-import com.nilhcem.androidthings.driver.wsepd.ImageConverter.TextWrapper;
-import com.nilhcem.androidthings.driver.wsepd.PaletteImage;
+import com.nilhcem.androidthings.driver.wsepd.sample.R;
+import com.smartnsoft.androidthings.driver.wsepdhat.DeviceType;
+import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplay;
+import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplayFactory;
+import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
+import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.TextWrapper;
+import com.smartnsoft.androidthings.driver.wsepdhat.PaletteImage;
 
 import java.io.IOException;
 

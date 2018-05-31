@@ -1,4 +1,4 @@
-package com.nilhcem.androidthings.driver.wsepd;
+package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.graphics.Color;
 

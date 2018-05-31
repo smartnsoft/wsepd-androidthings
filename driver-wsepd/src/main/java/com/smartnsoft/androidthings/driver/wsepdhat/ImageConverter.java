@@ -1,10 +1,10 @@
-package com.nilhcem.androidthings.driver.wsepd;
+package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.graphics.*;
 import android.util.Size;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.LANDSCAPE;
+import static com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation.LANDSCAPE;
 
 public class ImageConverter {
 
