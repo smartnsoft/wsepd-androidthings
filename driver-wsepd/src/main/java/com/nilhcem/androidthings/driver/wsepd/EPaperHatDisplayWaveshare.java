@@ -1,14 +1,16 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
-import java.io.IOException;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
 import android.view.View.MeasureSpec;
-
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
+import com.nilhcem.androidthings.driver.wsepd.PaletteImage.Palette;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
@@ -53,10 +55,10 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     private PixelBuffer pixelBuffer;
     private ImageConverter imageConverter;
 
-    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType) throws IOException {
-        super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType);
-        pixelBuffer = new PixelBuffer(deviceType, ImageConverter.Orientation.PORTRAIT);
-        imageConverter = new ImageConverter(deviceType, ImageConverter.Orientation.PORTRAIT);
+    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation) throws IOException {
+        super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation);
+        pixelBuffer = new PixelBuffer(deviceType, orientation);
+        imageConverter = new ImageConverter(deviceType, orientation);
     }
 
     @Override
@@ -96,10 +98,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     public void clear() throws IOException {
-        for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = (byte) 0x33;
-        }
-        setPixels(buffer);
+        Arrays.fill(buffer, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
     }
 
     private void turnDisplayOn() throws IOException {
@@ -114,13 +113,10 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    public void setPixels(byte[] pixels) throws IOException {
+    public void setPixels(Palette[] pixels) throws IOException {
         busyWait();
-        if (!specs.isBlackAndWhiteOnly) {
-            setPixelsOnColoredDisplay(pixels);
-        } else {
-            setPixelsOnMonochromeDisplay(pixels);
-        }
+        final byte[] output = pixelBuffer.mapPaletteArrayToDisplayByteArray(pixels);
+        System.arraycopy(output, 0, buffer, 0, output.length);
     }
 
     @Override
@@ -149,63 +145,6 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         System.arraycopy(pixels, 0, buffer, 0, Math.min(pixels.length, buffer.length));
     }
 
-    private void setPixelsOnColoredDisplay(byte[] pixels) {
-        for (int i = 0; i < buffer.length; i++) {
-            byte temp1 = pixels[i];
-            byte temp2;
-            int j = 0;
-            while (j < 4) {
-                if ((temp1 & 0xC0) == 0xC0) {
-                    temp2 = 0x03;
-                } else if ((temp1 & 0xC0) == 0x00) {
-                    temp2 = 0x00;
-                } else {
-                    temp2 = 0x04;
-                }
-
-                temp2 = (byte) ((temp2 << 4) & 0xFF);
-                temp1 = (byte) ((temp1 << 2) & 0xFF);
-                j += 1;
-                if ((temp1 & 0xC0) == 0xC0) {
-                    temp2 |= 0x03;
-                } else if ((temp1 & 0xC0) == 0x00) {
-                    temp2 |= 0x00;
-                } else {
-                    temp2 |= 0x04;
-                }
-                temp1 = (byte) ((temp1 << 2) & 0xFF);
-                buffer[i] = temp2;
-                j += 1;
-            }
-        }
-    }
-
-    private void setPixelsOnMonochromeDisplay(byte[] pixels) {
-        for (int i = 0; i < buffer.length; i++) {
-            byte temp1 = pixels[i];
-            byte temp2;
-            int j = 0;
-            while (j < 8) {
-                if ((temp1 & 0x80) == 0) {
-                    temp2 = 0x03;
-                } else {
-                    temp2 = 0x00;
-                }
-                temp2 = (byte) ((temp2 << 4) & 0xFF);
-                temp1 = (byte) ((temp1 << 1) & 0xFF);
-                j += 1;
-                if ((temp1 & 0x80) == 0) {
-                    temp2 |= 0x03;
-                } else {
-                    temp2 |= 0x00;
-                }
-                temp1 = (byte) ((temp1 << 1) & 0xFF);
-                buffer[i] = temp2;
-                j += 1;
-            }
-        }
-    }
-
     @Override
     protected void busyWait() throws IOException {
         while (!busyGpio.getValue()) {
@@ -232,10 +171,9 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         turnDisplayOff();
     }
 
-
     private Bitmap loadBitmapFromView(View view) {
-        final int specWidth = MeasureSpec.makeMeasureSpec(this.specs.xDot, MeasureSpec.EXACTLY);
-        final int specHeight = MeasureSpec.makeMeasureSpec(this.specs.yDot, MeasureSpec.EXACTLY);
+        final int specWidth = MeasureSpec.makeMeasureSpec(specs.getOrientatedWidth(screenOrientation), MeasureSpec.EXACTLY);
+        final int specHeight = MeasureSpec.makeMeasureSpec(specs.getOrientatedHeight(screenOrientation), MeasureSpec.EXACTLY);
         view.measure(specWidth, specHeight);
         final Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(bitmap);

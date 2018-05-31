@@ -1,8 +1,8 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
-final class PaletteImage {
+public final class PaletteImage {
 
-    enum Palette {
+    public enum Palette {
         BLACK,
         COLORED, // Red or Yellow
         WHITE;
@@ -39,4 +39,5 @@ final class PaletteImage {
     int getWidth() {
         return width;
     }
+
 }

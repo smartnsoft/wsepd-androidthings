@@ -3,9 +3,13 @@ package com.nilhcem.androidthings.driver.wsepd;
 import android.util.Log;
 import android.util.Size;
 
+import java.util.Arrays;
+
 import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;
 
 class PixelBuffer {
+
+    static final byte WHITE_PIXEL_GROUP_BYTE = (byte) (PaletteImage.Palette.WHITE.getByteColor() << 4 | PaletteImage.Palette.WHITE.getByteColor());
 
     private static final int PIXELS_PER_REGION = 2;
 
@@ -15,11 +19,14 @@ class PixelBuffer {
 
     private final Size displaySize;
 
+    private final DeviceType specs;
+
     private final int numberOfPixelRegions;
 
     PixelBuffer(DeviceType specs, ImageConverter.Orientation orientation) {
         this.orientation = orientation;
-        this.displaySize = new Size(specs.xDot, specs.yDot);
+        this.specs = specs;
+        this.displaySize = specs.getScreenSize();
         this.numberOfPixelRegions = displaySize.getWidth() * displaySize.getHeight() / PIXELS_PER_REGION;
         pixelBuffer = new PaletteImage.Palette[displaySize.getWidth()][displaySize.getHeight()];
     }
@@ -98,23 +105,27 @@ class PixelBuffer {
      * @param palette an array colors expecting to be drawn
      * @return a byte array representing the palette of a single color
      */
-    private byte[] mapPaletteArrayToDisplayByteArray(PaletteImage.Palette[] palette) {
+    byte[] mapPaletteArrayToDisplayByteArray(PaletteImage.Palette[] palette) {
         byte[] display = new byte[this.numberOfPixelRegions];
 
-        for (int index = 0; index < palette.length - 1; index += 2) {
+        for (int index = 0; index < palette.length - 1; index += PIXELS_PER_REGION) {
 
             final PaletteImage.Palette firstPixel = palette[index];
             final PaletteImage.Palette secondPixel = palette[index + 1];
 
             if (firstPixel != null && secondPixel != null) {
-                display[index / 2] = (byte) (firstPixel.getByteColor() << 4 | secondPixel.getByteColor());
+                display[index / PIXELS_PER_REGION] = (byte) (firstPixel.getByteColor() << 4 | secondPixel.getByteColor());
             } else if (firstPixel != null) {
-                display[index / 2] = (byte) (firstPixel.getByteColor() << 4);
+                display[index / PIXELS_PER_REGION] = (byte) (firstPixel.getByteColor() << 4);
             } else if (secondPixel != null) {
-                display[index / 2] = (byte) (secondPixel.getByteColor());
+                display[index / PIXELS_PER_REGION] = (byte) (secondPixel.getByteColor());
             } else {
-                display[index / 2] = (byte) (PaletteImage.Palette.WHITE.getByteColor() << 4 | PaletteImage.Palette.WHITE.getByteColor());
+                display[index / PIXELS_PER_REGION] = PixelBuffer.WHITE_PIXEL_GROUP_BYTE;
             }
+        }
+
+        if (palette.length < display.length) {
+            Arrays.fill(display, palette.length/PIXELS_PER_REGION, display.length, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
         }
 
         return display;

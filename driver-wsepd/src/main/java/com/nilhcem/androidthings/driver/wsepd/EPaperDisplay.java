@@ -9,7 +9,7 @@ public interface EPaperDisplay extends AutoCloseable {
 
     void clear() throws IOException;
 
-    void setPixels(byte[] pixels) throws IOException;
+    void setPixels(PaletteImage.Palette[] pixels) throws IOException;
 
     void setPixels(Bitmap bitmap) throws IOException;
 

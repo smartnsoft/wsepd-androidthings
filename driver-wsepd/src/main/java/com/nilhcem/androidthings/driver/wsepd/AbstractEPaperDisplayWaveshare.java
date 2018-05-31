@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
 
 abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
@@ -18,15 +19,17 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
     protected final Gpio rstGpio;
     protected final Gpio dcGpio;
     protected final DeviceType specs;
+    protected final Orientation screenOrientation;
 
     protected final byte[] buffer;
 
-    AbstractEPaperDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType) throws IOException {
+    AbstractEPaperDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation) throws IOException {
         this.spiDevice = spiDevice;
         this.busyGpio = busyGpio;
         this.rstGpio = rstGpio;
         this.dcGpio = dcGpio;
         this.specs = deviceType;
+        this.screenOrientation = orientation;
 
         buffer = createBuffer();
 
@@ -53,28 +56,6 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
     protected abstract byte[] createBuffer();
 
     protected abstract void busyWait() throws IOException;
-
-    @Override
-    public void setPixels(Bitmap bitmap) throws IOException {
-
-    }
-
-    @Override
-    public void setPixels(String text) throws IOException {
-
-    }
-
-    @Override
-    public void setPixels(View view)
-        throws IOException
-    {
-
-    }
-
-    @Override
-    public void setPixels(ImageConverter.TextWrapper text) throws IOException {
-
-    }
 
     void sendCommand(byte command) throws IOException {
         sendCommand(command, null);

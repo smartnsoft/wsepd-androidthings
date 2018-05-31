@@ -8,6 +8,11 @@ class ColorConverter {
         int red = Color.red(color);
         int blue = Color.blue(color);
         int green = Color.green(color);
+        int alpha = Color.alpha(color);
+
+        if(alpha == 0){
+            return PaletteImage.Palette.WHITE;
+        }
 
         if (red > 127 && blue > 127 && green > 127) {
             return PaletteImage.Palette.WHITE;

@@ -3,15 +3,24 @@ package com.nilhcem.androidthings.driver.wsepd.sample;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nilhcem.androidthings.driver.wsepd.DeviceType;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplay;
 import com.nilhcem.androidthings.driver.wsepd.EPaperDisplayFactory;
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter.TextWrapper;
+import com.nilhcem.androidthings.driver.wsepd.PaletteImage;
 
 public class SampleActivity
     extends Activity
@@ -69,29 +78,79 @@ public class SampleActivity
         screenPinout = null;
       }
 
-      display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5C);
+      display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5C, Orientation.LANDSCAPE);
 
-      // Clear screen
-      // display.clear();
-      // Thread.sleep(1000);
+      //displayBitmapFromResource(R.drawable.rocket);
 
-      Log.d(TAG, "Refreshing");
-      // Draw a black-on-white bitmap
+      displayPalette();
 
-      final View root = getLayoutInflater().inflate(R.layout.dummy_user_review, null, false);
-      final ViewGroup informationLayout = root.findViewById(R.id.informations);
-      informationLayout.addView(new InformationLayout(getApplicationContext(), "Quality", 4.55f));
-      informationLayout.addView(new InformationLayout(getApplicationContext(), "Price", 3.15f));
-      informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
-      display.setPixels(root);
-      display.refresh();
-      Log.d(TAG, "Refreshed !");
+      //displayDummyText();
+
+      //displayLayout();
+
+      //clearDisplay();
 
     }
-    catch (IOException e)
+    catch (Exception e)
     {
       Log.e(TAG, "Error initializing display", e);
     }
+  }
+
+    private void displayPalette() throws IOException {
+        final Size screenSize = DeviceType.Preset.EPD7X5B.deviceType.getScreenSize();
+        final PaletteImage.Palette[] colors = new PaletteImage.Palette[screenSize.getWidth()*screenSize.getHeight()];
+        for (int i = 0; i < colors.length; i++)
+        {
+            if(i%2 == 0 || i%5 == 0)
+            {
+              colors[i] = PaletteImage.Palette.COLORED;
+            }
+            else if(i%3 == 0 || i%7 == 0)
+            {
+              colors[i] = PaletteImage.Palette.BLACK;
+            }
+            else
+            {
+              colors[i] = PaletteImage.Palette.WHITE;
+            }
+        }
+        display.setPixels(colors);
+        display.refresh();
+    }
+
+    private void displayDummyText() throws IOException {
+        display.setPixels(new TextWrapper(Color.YELLOW, getResources().getDimensionPixelSize(R.dimen.huge_text_size),"Hello, World !"));
+        display.refresh();
+    }
+
+    private void displayLayout() throws IOException {
+    final View root = getLayoutInflater().inflate(R.layout.dummy_user_review, null, false);
+    final ViewGroup informationLayout = root.findViewById(R.id.informations);
+    informationLayout.addView(new InformationLayout(getApplicationContext(), "Quality", 4.55f));
+    informationLayout.addView(new InformationLayout(getApplicationContext(), "Price", 3.15f));
+    informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
+    display.setPixels(root);
+    display.refresh();
+  }
+
+  private void clearDisplay() throws IOException {
+      Log.d(TAG, "Sending clear command to the screen !");
+      display.clear();
+      display.refresh();
+      Log.d(TAG, "Cleared !");
+  }
+
+  private void displayBitmapFromResource(@DrawableRes int drawableID) throws IOException {
+    Log.d(TAG, "Sending bitmap data to the screen !");
+    final Bitmap bmp = BitmapFactory.decodeResource(getResources(), drawableID);
+    displayBitmap(bmp);
+  }
+
+  private void displayBitmap(@NonNull Bitmap bitmap) throws IOException {
+    display.setPixels(bitmap);
+    display.refresh();
+    Log.d(TAG, "Bitmap displayed to the screen !");
   }
 
   @Override

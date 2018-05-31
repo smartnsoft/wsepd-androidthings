@@ -1,26 +1,13 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
+import android.util.Size;
+
+import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;
+
+import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
+
 public final class DeviceType
 {
-
-  final int xDot;
-
-  final int yDot;
-
-  final byte[] lutDefaultFull;
-
-  final byte[] lutDefaultPart;
-
-  final boolean isBlackAndWhiteOnly;
-
-  public DeviceType(int xDot, int yDot, byte[] lutDefaultFull, byte[] lutDefaultPart, boolean isBlackAndWhiteOnly)
-  {
-    this.xDot = xDot;
-    this.yDot = yDot;
-    this.lutDefaultFull = lutDefaultFull;
-    this.lutDefaultPart = lutDefaultPart;
-    this.isBlackAndWhiteOnly = isBlackAndWhiteOnly;
-  }
 
   public enum Preset
   {
@@ -65,4 +52,36 @@ public final class DeviceType
       }
     }
   }
+
+  final int xDot;
+
+  final int yDot;
+
+  final byte[] lutDefaultFull;
+
+  final byte[] lutDefaultPart;
+
+  final boolean isBlackAndWhiteOnly;
+
+  public DeviceType(int xDot, int yDot, byte[] lutDefaultFull, byte[] lutDefaultPart, boolean isBlackAndWhiteOnly)
+  {
+    this.xDot = xDot;
+    this.yDot = yDot;
+    this.lutDefaultFull = lutDefaultFull;
+    this.lutDefaultPart = lutDefaultPart;
+    this.isBlackAndWhiteOnly = isBlackAndWhiteOnly;
+  }
+
+  public Size getScreenSize(){
+    return new Size(xDot,yDot);
+  }
+
+  public int getOrientatedWidth(Orientation orientation) {
+    return orientation == PORTRAIT ? yDot : xDot;
+  }
+
+  public int getOrientatedHeight(Orientation orientation) {
+    return orientation == PORTRAIT ? xDot : yDot;
+  }
+
 }
