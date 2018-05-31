@@ -12,7 +12,7 @@ import android.util.Log;
 import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nilhcem.androidthings.driver.wsepd.sample.R;
+import com.smartnsoft.androidthings.driver.wsepdhat.sample.R;
 import com.smartnsoft.androidthings.driver.wsepdhat.DeviceType;
 import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplay;
 import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplayFactory;
@@ -70,15 +70,15 @@ public class SampleActivity
 
             display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5C, Orientation.LANDSCAPE);
 
-            displayBitmapFromResource(R.drawable.rocket);
+//            displayBitmapFromResource(R.drawable.rocket);
 
-//      displayPalette();
+//            displayPalette();
 
-            //displayDummyText();
+            displayDummyText();
 
-            //displayLayout();
+//            displayLayout();
 
-            //clearDisplay();
+//            clearDisplay();
 
         } catch (Exception e) {
             Log.e(TAG, "Error initializing display", e);
@@ -86,6 +86,7 @@ public class SampleActivity
     }
 
     private void displayPalette() throws IOException {
+        Log.d(TAG, "Sending dummy palette array to the screen !");
         final Size screenSize = DeviceType.Preset.EPD7X5B.deviceType.getScreenSize();
         final PaletteImage.Palette[] colors = new PaletteImage.Palette[screenSize.getWidth() * screenSize.getHeight()];
         for (int i = 0; i < colors.length; i++) {
@@ -99,14 +100,18 @@ public class SampleActivity
         }
         display.setPixels(colors);
         display.refresh();
+        Log.d(TAG, "Dummy palette array has been displayed on the screen !");
     }
 
     private void displayDummyText() throws IOException {
+        Log.d(TAG, "Sending dummy text to the screen !");
         display.setPixels(new TextWrapper(Color.YELLOW, getResources().getDimensionPixelSize(R.dimen.huge_text_size), "Hello, World !"));
         display.refresh();
+        Log.d(TAG, "Text has been displayed on the screen !");
     }
 
     private void displayLayout() throws IOException {
+        Log.d(TAG, "Sending layout to the screen !");
         final View root = getLayoutInflater().inflate(R.layout.dummy_user_review, null, false);
         final ViewGroup informationLayout = root.findViewById(R.id.informations);
         informationLayout.addView(new InformationLayout(getApplicationContext(), "Quality", 4.55f));
@@ -114,6 +119,7 @@ public class SampleActivity
         informationLayout.addView(new InformationLayout(getApplicationContext(), "Usefulness", 1.00f));
         display.setPixels(root);
         display.refresh();
+        Log.d(TAG, "Layout has been diplayed on the screen !");
     }
 
     private void clearDisplay() throws IOException {
