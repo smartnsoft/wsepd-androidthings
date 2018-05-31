@@ -1,3 +1,3 @@
+- Javadoc !
 - Add a way to set where the bitmap is displayed with a gravity
-- Fix the landscape orientation logic
 - Add a way to handle grayscale part (and alpha channel) of bitmaps
