@@ -1,38 +1,33 @@
-# Waveshare e-Paper Display module driver for Android Things
+# Waveshare e-Paper HAT Display module driver for Android Things
 
-*A very simple Waveshare eInk display module driver implementation for Android Things*  
+*A very simple Waveshare e-Ink display module driver implementation for Android Things*  
 
-![preview][]  
+![Preview](assets/preview.jpg "Preview")  
 
 ## Download
 
 ```groovy
 dependencies {
-    compile 'com.nilhcem.androidthings:driver-wsepd:0.0.2'
+    compile 'com.smartnsoft.androidthings:driver-wsepd-hat:0.0.1'
 }
 ```
 
 ## Usage
 
-*Tested on [Waveshare 2.9inch e-Paper Module][module_wiki]*
+*Tested on [Waveshare 7.5inch e-Paper Module (C)][module_wiki]*
 
 ```java
-// Access the EPD2X9 display
+// Access the EPD7X5C display
 EPaperDisplay display;
-EPaperDisplay.DeviceType epd2x9 = EPaperDisplay.DeviceType.Preset.EPD2X9.deviceType;
-display = EPaperDisplay.Factory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, epd2x9);
+EPaperDisplay.DeviceType epd7x5c = EPaperDisplay.DeviceType.Preset.EPD7X5C.deviceType;
+display = EPaperDisplayFactory.create(SPI_NAME, BUSY_GPIO, RESET_GPIO, DC_GPIO, epd7x5c, Orientation.PORTRAIT);
 
 // Clear screen
 display.clear();
 
-// Set pixels
-byte[] rawPixels = SampleData.WAVESHARE_LOGO;
-display.setPixels(rawPixels);
-
 // Set a bitmap
-Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.android);
-byte[] bmpPixels = BitmapHelper.bmpToBytes(bmp);
-display.setPixels(bmpPixels);
+Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
+display.setPixels(bitmap);
 
 // Refresh the screen
 display.refresh();
@@ -43,21 +38,22 @@ display.close();
 
 ### Hardware connection
 
-| e-Paper | Raspberry Pi 3 |
-| ------- | -------------- |
-| 3.3V    | 3.3V           |
-| GND     | GND            |
-| DIN     | MOSI (#19)     |
-| CLK     | SCLK (#23)     |
-| CS      | CE0 (#24)      |
-| DC      | BCM25 (#22)    |
-| RST     | BCM17 (#11)    |
-| BUSY    | BCM24 (#18)    |
+| e-Paper | Raspberry Pi 3 |    Pico i.MX7D    |
+| ------- | -------------- | ----------------- |
+| 3.3V    | 3.3V           | 3.3V              |
+| GND     | GND            | GND               |
+| DIN     | MOSI (#19)     | MOSI (#19)        |
+| CLK     | SCLK (#23)     | SCLK (#23)        |
+| CS      | CE0 (#24)      | SPI3 (SS1) (#24)  |
+| DC      | BCM25 (#22)    | GPIO5_IO00 (#22)  |
+| RST     | BCM17 (#11)    | GPIO1_IO10 (#15)  |
+| BUSY    | BCM24 (#18)    | GPIO6_IO12 (#18)  |
 
 ## Kudos to
 
 * Novoda, and Blundell for their [InkypHat driver][inkyphat]
+* Nilhcem for his [WSEPD driver][wsepd]
 
-[preview]: https://raw.githubusercontent.com/Nilhcem/wsepd-androidthings/master/assets/preview.jpg
-[module_wiki]: http://www.waveshare.com/wiki/2.9inch_e-Paper_Module
+[module_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
 [inkyphat]: https://www.novoda.com/blog/porting-a-python-library-to-android-things-the-inkyphat/
+[wsepd]: https://github.com/Nilhcem/wsepd-androidthings
