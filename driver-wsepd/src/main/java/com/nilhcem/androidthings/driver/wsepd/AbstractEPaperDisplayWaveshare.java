@@ -1,13 +1,10 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
-import java.io.IOException;
-
-import android.graphics.Bitmap;
-import android.view.View;
-
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 import com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation;
+
+import java.io.IOException;
 
 abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 

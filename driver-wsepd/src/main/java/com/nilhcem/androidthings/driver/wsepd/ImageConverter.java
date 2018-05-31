@@ -1,12 +1,7 @@
 package com.nilhcem.androidthings.driver.wsepd;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.util.Size;
-import android.widget.TextView;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;

@@ -125,7 +125,7 @@ class PixelBuffer {
         }
 
         if (palette.length < display.length) {
-            Arrays.fill(display, palette.length/PIXELS_PER_REGION, display.length, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
+            Arrays.fill(display, palette.length / PIXELS_PER_REGION, display.length, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
         }
 
         return display;

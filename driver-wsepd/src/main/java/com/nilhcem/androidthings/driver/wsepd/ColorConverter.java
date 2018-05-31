@@ -10,7 +10,7 @@ class ColorConverter {
         int green = Color.green(color);
         int alpha = Color.alpha(color);
 
-        if(alpha == 0){
+        if (alpha == 0) {
             return PaletteImage.Palette.WHITE;
         }
 
