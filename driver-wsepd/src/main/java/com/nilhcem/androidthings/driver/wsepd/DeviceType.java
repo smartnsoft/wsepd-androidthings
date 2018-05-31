@@ -68,11 +68,11 @@ public final class DeviceType {
     }
 
     public int getOrientatedWidth(Orientation orientation) {
-        return orientation == Orientation.PORTRAIT ? yDot : xDot;
+        return orientation == Orientation.LANDSCAPE ? xDot : yDot;
     }
 
     public int getOrientatedHeight(Orientation orientation) {
-        return orientation == Orientation.PORTRAIT ? xDot : yDot;
+        return orientation == Orientation.LANDSCAPE ? yDot : xDot;
     }
 
 }

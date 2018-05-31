@@ -4,7 +4,7 @@ import android.graphics.*;
 import android.util.Size;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;
+import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.LANDSCAPE;
 
 public class ImageConverter {
 
@@ -29,7 +29,7 @@ public class ImageConverter {
     }
 
     public enum Orientation {
-        LANDSCAPE, PORTRAIT
+        PORTRAIT, LANDSCAPE
     }
 
     private final Size displaySize;
@@ -69,7 +69,7 @@ public class ImageConverter {
     private Bitmap scaleToScreenBounds(Bitmap sourceBitmap, ImageScaler.Scale scale) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
-        if (bitmapWidth < getOrientatedWidth() && bitmapHeight < getOrientatedHeight()) {
+        if (bitmapWidth <= getOrientatedWidth() && bitmapHeight <= getOrientatedHeight()) {
             return sourceBitmap;
         }
 
@@ -84,11 +84,11 @@ public class ImageConverter {
     }
 
     private int getOrientatedWidth() {
-        return isIn(PORTRAIT) ? displaySize.getWidth() : displaySize.getHeight();
+        return isIn(LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
     }
 
     private int getOrientatedHeight() {
-        return isIn(PORTRAIT) ? displaySize.getHeight() : displaySize.getWidth();
+        return isIn(LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
     }
 
     private boolean isIn(Orientation orientation) {

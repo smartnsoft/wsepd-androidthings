@@ -7,17 +7,17 @@ import java.io.IOException;
 
 public interface EPaperDisplay extends AutoCloseable {
 
-    void clear() throws IOException;
+    void clear();
 
-    void setPixels(PaletteImage.Palette[] pixels) throws IOException;
+    void setPixels(PaletteImage.Palette[] pixels);
 
-    void setPixels(Bitmap bitmap) throws IOException;
+    void setPixels(Bitmap bitmap);
 
-    void setPixels(View view) throws IOException;
+    void setPixels(View view);
 
-    void setPixels(String text) throws IOException;
+    void setPixels(String text);
 
-    void setPixels(ImageConverter.TextWrapper text) throws IOException;
+    void setPixels(ImageConverter.TextWrapper text);
 
     void refresh() throws IOException;
 

@@ -5,7 +5,7 @@ import android.util.Size;
 
 import java.util.Arrays;
 
-import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.PORTRAIT;
+import static com.nilhcem.androidthings.driver.wsepd.ImageConverter.Orientation.LANDSCAPE;
 
 class PixelBuffer {
 
@@ -59,7 +59,7 @@ class PixelBuffer {
             return;
         }
 
-        if (isIn(PORTRAIT)) {
+        if (isIn(LANDSCAPE)) {
             pixelBuffer[x][y] = color;
         } else {
             int localX = (displaySize.getWidth() - 1) - y;
@@ -70,11 +70,11 @@ class PixelBuffer {
     }
 
     private int getOrientatedWidth() {
-        return isIn(PORTRAIT) ? displaySize.getWidth() : displaySize.getHeight();
+        return isIn(LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
     }
 
     private int getOrientatedHeight() {
-        return isIn(PORTRAIT) ? displaySize.getHeight() : displaySize.getWidth();
+        return isIn(LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
     }
 
     private boolean isIn(ImageConverter.Orientation orientation) {

@@ -97,7 +97,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    public void clear() throws IOException {
+    public void clear() {
         Arrays.fill(buffer, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
     }
 
@@ -113,29 +113,28 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    public void setPixels(Palette[] pixels) throws IOException {
-        busyWait();
+    public void setPixels(Palette[] pixels) {
         final byte[] output = pixelBuffer.mapPaletteArrayToDisplayByteArray(pixels);
         System.arraycopy(output, 0, buffer, 0, output.length);
     }
 
     @Override
-    public void setPixels(Bitmap bitmap) throws IOException {
+    public void setPixels(Bitmap bitmap) {
         setPixels(imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y), 0, 0);
     }
 
     @Override
-    public void setPixels(View view) throws IOException {
+    public void setPixels(View view) {
         setPixels(loadBitmapFromView(view));
     }
 
     @Override
-    public void setPixels(ImageConverter.TextWrapper text) throws IOException {
+    public void setPixels(ImageConverter.TextWrapper text) {
         setPixels(imageConverter.convertText(text.text, text.textSize, text.textColor), 0, 0);
     }
 
     @Override
-    public void setPixels(String text) throws IOException {
+    public void setPixels(String text) {
         setPixels(imageConverter.convertText(new ImageConverter.TextWrapper(text)), 0, 0);
     }
 
@@ -172,6 +171,9 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     private Bitmap loadBitmapFromView(View view) {
+        if(screenOrientation == Orientation.PORTRAIT){
+            view.setRotation(90f);
+        }
         final int specWidth = MeasureSpec.makeMeasureSpec(specs.getOrientatedWidth(screenOrientation), MeasureSpec.EXACTLY);
         final int specHeight = MeasureSpec.makeMeasureSpec(specs.getOrientatedHeight(screenOrientation), MeasureSpec.EXACTLY);
         view.measure(specWidth, specHeight);
