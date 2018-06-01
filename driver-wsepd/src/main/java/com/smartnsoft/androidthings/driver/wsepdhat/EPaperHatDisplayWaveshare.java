@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
 import android.view.View.MeasureSpec;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
@@ -171,7 +172,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     private Bitmap loadBitmapFromView(View view) {
-        if(screenOrientation == Orientation.PORTRAIT){
+        if (screenOrientation == Orientation.PORTRAIT) {
             view.setRotation(90f);
         }
         final int specWidth = MeasureSpec.makeMeasureSpec(specs.getOrientatedWidth(screenOrientation), MeasureSpec.EXACTLY);

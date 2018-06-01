@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.nilhcem.androidthings.driver.wsepd.sample.R;
 import com.willy.ratingbar.BaseRatingBar;
 
 /**
