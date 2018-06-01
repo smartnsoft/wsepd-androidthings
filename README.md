@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Waveshare e-Paper HAT Display module driver for Android Things
 
 *A very simple Waveshare e-Ink display module driver implementation for Android Things*  
@@ -53,6 +55,15 @@ display.close();
 
 * Novoda, and Blundell for their [InkypHat driver][inkyphat]
 * Nilhcem for his [WSEPD driver][wsepd]
+
+## License
+
+This SDK is under the MIT license.
+
+## Author
+
+This Monero Miner was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
+
 
 [module_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
 [inkyphat]: https://www.novoda.com/blog/porting-a-python-library-to-android-things-the-inkyphat/
