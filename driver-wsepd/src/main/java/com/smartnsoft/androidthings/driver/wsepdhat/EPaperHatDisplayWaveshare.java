@@ -2,6 +2,7 @@ package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.MeasureSpec;
 
@@ -63,6 +64,49 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
+    public void clear() {
+        Arrays.fill(buffer, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
+    }
+
+    @Override
+    public void setPixels(@NonNull Palette[] pixels) {
+        final byte[] output = pixelBuffer.mapPaletteArrayToDisplayByteArray(pixels);
+        System.arraycopy(output, 0, buffer, 0, output.length);
+    }
+
+    @Override
+    public void setPixels(@NonNull Bitmap bitmap) {
+        setPixels(imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y), 0, 0);
+    }
+
+    @Override
+    public void setPixels(@NonNull View view) {
+        setPixels(loadBitmapFromView(view));
+    }
+
+    @Override
+    public void setPixels(@NonNull TextWrapper text) {
+        setPixels(imageConverter.convertText(text.text, text.textSize, text.textColor), 0, 0);
+    }
+
+    @Override
+    public void setPixels(@NonNull String text) {
+        setPixels(imageConverter.convertText(new TextWrapper(text)), 0, 0);
+    }
+
+    @Override
+    public void refresh() throws IOException {
+        turnDisplayOn();
+        busyWait();
+        sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
+        sendCommand(DATA_STOP);
+        sendCommand(DISPLAY_REFRESH);
+        sleep(100);
+        busyWait();
+        turnDisplayOff();
+    }
+
+    @Override
     protected byte[] createBuffer() {
         return new byte[specs.xDot / 2 * specs.yDot];
     }
@@ -98,54 +142,6 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    public void clear() {
-        Arrays.fill(buffer, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
-    }
-
-    private void turnDisplayOn() throws IOException {
-        init();
-    }
-
-    private void turnDisplayOff() throws IOException {
-        busyWait();
-        sendCommand(CMD_POWER_OFF);
-        busyWait();
-        sendCommand(DEEP_SLEEP, new byte[]{(byte) 0xa5});
-    }
-
-    @Override
-    public void setPixels(Palette[] pixels) {
-        final byte[] output = pixelBuffer.mapPaletteArrayToDisplayByteArray(pixels);
-        System.arraycopy(output, 0, buffer, 0, output.length);
-    }
-
-    @Override
-    public void setPixels(Bitmap bitmap) {
-        setPixels(imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y), 0, 0);
-    }
-
-    @Override
-    public void setPixels(View view) {
-        setPixels(loadBitmapFromView(view));
-    }
-
-    @Override
-    public void setPixels(ImageConverter.TextWrapper text) {
-        setPixels(imageConverter.convertText(text.text, text.textSize, text.textColor), 0, 0);
-    }
-
-    @Override
-    public void setPixels(String text) {
-        setPixels(imageConverter.convertText(new ImageConverter.TextWrapper(text)), 0, 0);
-    }
-
-    private void setPixels(final PaletteImage paletteImage, int x, int y) {
-        pixelBuffer.setImage(x, y, paletteImage);
-        byte[] pixels = pixelBuffer.getDisplayPixels();
-        System.arraycopy(pixels, 0, buffer, 0, Math.min(pixels.length, buffer.length));
-    }
-
-    @Override
     protected void busyWait() throws IOException {
         while (!busyGpio.getValue()) {
             sleep(100);
@@ -160,15 +156,21 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         sleep(200);
     }
 
-    @Override
-    public void refresh() throws IOException {
-        turnDisplayOn();
+    private void setPixels(final PaletteImage paletteImage, int x, int y) {
+        pixelBuffer.setImage(x, y, paletteImage);
+        byte[] pixels = pixelBuffer.getDisplayPixels();
+        System.arraycopy(pixels, 0, buffer, 0, Math.min(pixels.length, buffer.length));
+    }
+
+    private void turnDisplayOn() throws IOException {
+        init();
+    }
+
+    private void turnDisplayOff() throws IOException {
         busyWait();
-        sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
-        sendCommand(DISPLAY_REFRESH);
-        sleep(100);
+        sendCommand(CMD_POWER_OFF);
         busyWait();
-        turnDisplayOff();
+        sendCommand(DEEP_SLEEP, new byte[]{(byte) 0xa5});
     }
 
     private Bitmap loadBitmapFromView(View view) {
