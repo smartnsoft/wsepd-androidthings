@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.8.0'
+        classpath 'com.novoda:bintray-release:0.8.1'
     }
 }
 
@@ -25,11 +25,44 @@ dependencies {
     compileOnly ("com.android.support:support-annotations:27.1.1@jar")
 }
 
+task sourcesJar(type: Jar) {
+    classifier = "sources"
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    title = "Android Things ePaper HAT Driver API"
+    description "Javadoc for the Android Things ePaper HAT Driver"
+    source = android.sourceSets.main.java.srcDirs
+
+    options.charSet = "UTF-8"
+    options.overview = "src/main/javadoc/overview.html"
+    options.links = ["http://docs.oracle.com/javase/7/docs/api/", "http://d.android.com/reference/"]
+
+    classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+    failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = "javadoc"
+    from javadoc.destinationDir
+    // options.encoding = 'UTF-8'
+}
+
+artifacts
+{
+    archives javadocJar
+    archives sourcesJar
+}
+
 publish {
     userOrg = 'smartnsoft'
     groupId = 'com.smartnsoft.androidthings'
     artifactId = 'driver-wsepd-hat'
     publishVersion = '0.0.1'
+    licences = ['MIT']
     desc = 'Android Things driver for Waveshare e-paper display modules using the e-Paper HAT, like the 7.5" display.'
     website = 'https://github.com/smartnsoft/wsepd-androidthings'
+    bintrayUser = findProperty("bintrayUsername") ?: ""
+    bintrayKey = findProperty("bintrayKey") ?: ""
 }

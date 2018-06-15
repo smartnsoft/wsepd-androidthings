@@ -1,4 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:AndroidThingsEPaperHatDriver)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=AndroidThingsEPaperHatDriver)
 
 # Waveshare e-Paper HAT Display module driver for Android Things
 
