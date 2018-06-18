@@ -64,7 +64,7 @@ This SDK is under the MIT license.
 
 ## Author
 
-This Monero Miner was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
+This Android Things driver for the Waveshare ePaper HAT was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
 
 
 [module_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
