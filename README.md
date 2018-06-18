@@ -11,7 +11,7 @@
 
 ```groovy
 dependencies {
-    compile 'com.smartnsoft.androidthings:driver-wsepd-hat:0.0.1'
+    compile 'com.smartnsoft.androidthings:epaper-hat-driver:0.0.1'
 }
 ```
 

@@ -58,7 +58,7 @@ artifacts
 publish {
     userOrg = 'smartnsoft'
     groupId = 'com.smartnsoft.androidthings'
-    artifactId = 'driver-wsepd-hat'
+    artifactId = 'epaper-hat-driver'
     publishVersion = '0.0.1'
     licences = ['MIT']
     desc = 'Android Things driver for Waveshare e-paper display modules using the e-Paper HAT, like the 7.5" display.'
