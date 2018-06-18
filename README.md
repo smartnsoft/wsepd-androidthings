@@ -1,3 +1,4 @@
+[ ![Download](https://api.bintray.com/packages/smartnsoft/maven/epaper-hat-driver/images/download.svg) ](https://bintray.com/smartnsoft/maven/epaper-hat-driver/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:AndroidThingsEPaperHatDriver)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=AndroidThingsEPaperHatDriver)
 

@@ -1,14 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.8.1'
-    }
-}
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven"
+apply plugin: "maven-publish"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -17,6 +10,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        versionName rootProject.ext.mavenArtifactVersion
     }
 }
 
@@ -39,7 +33,14 @@ task javadoc(type: Javadoc) {
     options.overview = "src/main/javadoc/overview.html"
     options.links = ["http://docs.oracle.com/javase/7/docs/api/", "http://d.android.com/reference/"]
 
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompiler.classpath
+        }
+    }
+
     classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("javadoc/")
     failOnError = false
 }
 
@@ -55,14 +56,105 @@ artifacts
     archives sourcesJar
 }
 
-publish {
-    userOrg = 'smartnsoft'
-    groupId = 'com.smartnsoft.androidthings'
-    artifactId = 'epaper-hat-driver'
-    publishVersion = '0.0.1'
-    licences = ['MIT']
-    desc = 'Android Things driver for Waveshare e-paper display modules using the e-Paper HAT, like the 7.5" display.'
-    website = 'https://github.com/smartnsoft/wsepd-androidthings'
-    bintrayUser = findProperty("bintrayUsername") ?: ""
-    bintrayKey = findProperty("bintrayKey") ?: ""
+def pomConfig = {
+    licenses
+    {
+        license
+        {
+            name "MIT License (MIT)"
+            url "https://opensource.org/licenses/MIT"
+            distribution "repo"
+        }
+    }
+}
+
+publishing
+{
+    publications
+    {
+        ReleasePublication(MavenPublication)
+        {
+            artifact sourcesJar
+            artifact javadocJar
+            groupId rootProject.ext.mavenGroupId
+            artifactId rootProject.ext.mavenArtifactId
+            version rootProject.ext.mavenArtifactVersion
+
+            pom.withXml
+            {
+                def root = asNode()
+                root.appendNode("description", rootProject.ext.mavenDescription)
+                root.appendNode("name", rootProject.ext.mavenArtifactId)
+                root.appendNode("url", rootProject.ext.projectGitHubUrl)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+//https://gist.github.com/bugs84/b7887fb5d7f9f2d484b8
+publishing.publications.all
+{
+    pom.withXml
+    {
+        asNode().dependencies."*".findAll()
+        {
+            it.scope.text() == "runtime" && project.configurations.compile.allDependencies.find { dep ->
+                dep.name == it.artifactId.text()
+            }
+        }.each
+        {
+            it.scope*.value = "compile"
+        }
+    }
+}
+
+bintray
+{
+    publications = ["ReleasePublication"]
+
+    pkg
+    {
+        repo = "maven"
+        name = rootProject.ext.mavenArtifactId
+        userOrg = "smartnsoft"
+        licenses = ["MIT"]
+        vcsUrl = rootProject.ext.projectGitHubUrl + ".git"
+        publish = true
+
+        version
+        {
+            name = rootProject.ext.mavenArtifactVersion
+            desc = rootProject.ext.mavenDescription
+            vcsTag = rootProject.ext.mavenArtifactId + "-" + rootProject.ext.mavenArtifactVersion
+        }
+    }
+}
+
+uploadArchives
+{
+    repositories
+    {
+        mavenDeployer
+        {
+            repository(url: "https://api.bintray.com/maven/smartnsoft/maven/"+ rootProject.ext.mavenArtifactId + "/;publish=1")
+            {
+                authentication(userName: findProperty("bintrayUsername") ?: "", password: findProperty("bintrayKey") ?: "")
+            }
+
+            snapshotRepository(url: nexusSnapshotUrl)
+            {
+                authentication(userName: findProperty("nexusUsername") ?: "", password: findProperty("nexusPassword") ?: "")
+            }
+
+            pom.project
+            {
+                name rootProject.ext.mavenArtifactId
+                groupId rootProject.ext.mavenGroupId
+                artifactId rootProject.ext.mavenArtifactId
+                version rootProject.ext.mavenArtifactVersion
+                packaging "aar"
+            }
+        }
+    }
 }
