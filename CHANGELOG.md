@@ -3,13 +3,13 @@ Change Log
 
 ## Version 0.0.2
 
-_2018-03-15_
+_TBA_
 
- *  Use the `0.7-devpreview` version of the Android Things support library, which includes some API changes.
+ *  Added support for the 5.83inch e-Paper HAT
 
 
 ## Version 0.0.1
 
-_2017-09-08_
+_2018-06-18_
 
 Initial release.
