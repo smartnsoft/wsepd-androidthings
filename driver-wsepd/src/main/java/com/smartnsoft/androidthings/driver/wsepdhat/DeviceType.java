@@ -6,6 +6,20 @@ import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 public final class DeviceType {
 
     public enum Preset {
+        EPD5X8A(new DeviceType(
+                600,
+                448,
+                null,
+                null,
+                true)
+        ),
+        EPD5X8B(new DeviceType(
+                600,
+                448,
+                null,
+                null,
+                false)
+        ),
         EPD7X5A(new DeviceType(
                 640,
                 384,

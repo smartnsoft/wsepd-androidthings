@@ -68,7 +68,7 @@ public class SampleActivity
                 screenPinout = null;
             }
 
-            display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD7X5C, Orientation.LANDSCAPE);
+            display = EPaperDisplayFactory.create(screenPinout.spiName, screenPinout.busyGPIO, screenPinout.resetGPIO, screenPinout.dcGPIO, DeviceType.Preset.EPD5X8A, Orientation.LANDSCAPE);
 
 //            displayBitmapFromResource(R.drawable.rocket);
 

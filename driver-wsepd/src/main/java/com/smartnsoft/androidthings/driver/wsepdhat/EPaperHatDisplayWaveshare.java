@@ -126,12 +126,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         sendCommand(CMD_TEMPERATURE_CALIBRATION, new byte[]{(0x00)});
         sendCommand(CMD_VCOM_AND_DATA_INTERVAL_SETTING, new byte[]{(0x77)});
         sendCommand(CMD_TCON_SETTING, new byte[]{(0x22)});
-        sendCommand(CMD_TCON_RESOLUTION, new byte[]{
-                0x02,     //source 640
-                (byte) 0x80,
-                0x01,     //gate 384
-                (byte) 0x80
-        });
+        initResolution();
         sendCommand(CMD_VCM_DC_SETTING, new byte[]{
                 (0x1E)      //decide by LUT file
         });
@@ -139,6 +134,26 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
                 //FLASH MODE
                 (0x03)
         });
+    }
+
+    protected void initResolution() throws IOException {
+        if (specs.xDot == DeviceType.Preset.EPD7X5A.deviceType.xDot
+                && specs.yDot == DeviceType.Preset.EPD7X5A.deviceType.yDot) {
+            sendCommand(CMD_TCON_RESOLUTION, new byte[]{
+                    0x02,     //source 640
+                    (byte) 0x80,
+                    0x01,     //gate 384
+                    (byte) 0x80
+            });
+        } else if (specs.xDot == DeviceType.Preset.EPD5X8A.deviceType.xDot
+                && specs.yDot == DeviceType.Preset.EPD5X8A.deviceType.yDot) {
+            sendCommand(CMD_TCON_RESOLUTION, new byte[]{
+                    0x02,     //source 600
+                    (byte) 0x58,
+                    0x01,     //gate 448
+                    (byte) 0xC0
+            });
+        }
     }
 
     @Override
