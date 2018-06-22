@@ -4,7 +4,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
     }
 }
 
@@ -29,4 +30,9 @@ ext {
     dependencies = [
             'androidthings': 'com.google.android.things:androidthings:1.0'
     ]
+    mavenGroupId = "com.smartnsoft.androidthings"
+    mavenArtifactId = "epaper-hat-driver"
+    mavenArtifactVersion = "0.0.1"
+    mavenDescription = "Android Things driver for Waveshare e-paper display modules using the e-Paper HAT, like the 7.5\" display."
+    projectGitHubUrl = "https://github.com/smartnsoft/wsepd-androidthings"
 }

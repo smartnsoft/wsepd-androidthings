@@ -12,12 +12,12 @@ import android.util.Log;
 import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
-import com.smartnsoft.androidthings.driver.wsepdhat.sample.R;
+
 import com.smartnsoft.androidthings.driver.wsepdhat.DeviceType;
 import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplay;
 import com.smartnsoft.androidthings.driver.wsepdhat.EPaperDisplayFactory;
 import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
-import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.TextWrapper;
+import com.smartnsoft.androidthings.driver.wsepdhat.TextWrapper;
 import com.smartnsoft.androidthings.driver.wsepdhat.PaletteImage;
 
 import java.io.IOException;

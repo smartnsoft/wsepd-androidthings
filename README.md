@@ -1,4 +1,6 @@
+[ ![Download](https://api.bintray.com/packages/smartnsoft/maven/epaper-hat-driver/images/download.svg) ](https://bintray.com/smartnsoft/maven/epaper-hat-driver/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:AndroidThingsEPaperHatDriver)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=AndroidThingsEPaperHatDriver)
 
 # Waveshare e-Paper HAT Display module driver for Android Things
 
@@ -10,7 +12,7 @@
 
 ```groovy
 dependencies {
-    compile 'com.smartnsoft.androidthings:driver-wsepd-hat:0.0.1'
+    compile 'com.smartnsoft.androidthings:epaper-hat-driver:0.0.1'
 }
 ```
 
@@ -62,7 +64,7 @@ This SDK is under the MIT license.
 
 ## Author
 
-This Monero Miner was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
+This Android Things driver for the Waveshare ePaper HAT was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
 
 
 [module_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)

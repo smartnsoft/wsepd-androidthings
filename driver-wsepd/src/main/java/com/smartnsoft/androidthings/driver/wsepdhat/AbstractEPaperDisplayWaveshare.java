@@ -48,15 +48,19 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
         init();
     }
 
+    @Override
+    public void close() throws IOException {
+        spiDevice.close();
+        busyGpio.close();
+        rstGpio.close();
+        dcGpio.close();
+    }
+
     protected abstract void init() throws IOException;
 
     protected abstract byte[] createBuffer();
 
     protected abstract void busyWait() throws IOException;
-
-    void sendCommand(byte command) throws IOException {
-        sendCommand(command, null);
-    }
 
     protected void sendCommand(byte command, /*Nullable*/ byte[] data) throws IOException {
         sendCommand(command, data, true);
@@ -81,25 +85,21 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
         }
     }
 
-    void resetDriver() throws IOException {
-        rstGpio.setValue(false);
-        sleep(100);
-        rstGpio.setValue(true);
-    }
-
-    @Override
-    public void close() throws IOException {
-        spiDevice.close();
-        busyGpio.close();
-        rstGpio.close();
-        dcGpio.close();
-    }
-
     protected void sleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    void sendCommand(byte command) throws IOException {
+        sendCommand(command, null);
+    }
+
+    void resetDriver() throws IOException {
+        rstGpio.setValue(false);
+        sleep(100);
+        rstGpio.setValue(true);
     }
 }
