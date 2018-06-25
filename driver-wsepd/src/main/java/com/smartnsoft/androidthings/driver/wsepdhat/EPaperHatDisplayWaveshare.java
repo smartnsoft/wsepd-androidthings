@@ -62,11 +62,11 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
         this(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation, true);
     }
 
-    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation, boolean shoudldSleepAfterDisplay) throws IOException {
+    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation, boolean shouldSleepAfterDisplay) throws IOException {
         super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation);
         pixelBuffer = new PixelBuffer(deviceType, orientation);
         imageConverter = new ImageConverter(deviceType, orientation);
-        shoudldSleepAfterDisplay = shouldSleepAfterDisplay;
+        this.shouldSleepAfterDisplay = shouldSleepAfterDisplay;
     }
 
     @Override
@@ -108,17 +108,19 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     public void refresh() throws IOException {
-        if (shouldSleepAfterDisplay()) {
-            turnDisplayOn();
+        if (!isBusy()) {
+            if (shouldSleepAfterDisplay()) {
+                turnDisplayOn();
+                busyWait();
+            }
+            sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
+            sendCommand(DATA_STOP);
+            sendCommand(DISPLAY_REFRESH);
+            sleep(100);
             busyWait();
-        }
-        sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
-        sendCommand(DATA_STOP);
-        sendCommand(DISPLAY_REFRESH);
-        sleep(100);
-        busyWait();
-        if (shouldSleepAfterDisplay()) {
-            turnDisplayOff();
+            if (shouldSleepAfterDisplay()) {
+                turnDisplayOff();
+            }
         }
     }
 
@@ -173,10 +175,8 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    protected void busyWait() throws IOException {
-        while (!busyGpio.getValue()) {
-            sleep(100);
-        }
+    protected boolean isBusy() throws IOException {
+        return !busyGpio.getValue();
     }
 
     @Override

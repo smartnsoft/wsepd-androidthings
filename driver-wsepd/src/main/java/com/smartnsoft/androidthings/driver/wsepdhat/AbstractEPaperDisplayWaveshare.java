@@ -4,7 +4,12 @@ import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import android.util.Log;
 
 abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
@@ -60,7 +65,15 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
     protected abstract byte[] createBuffer();
 
-    protected abstract void busyWait() throws IOException;
+    protected abstract boolean isBusy() throws IOException;
+
+    protected void busyWait() throws IOException
+    {
+        while (isBusy())
+        {
+            sleep(100);
+        }
+    }
 
     protected void sendCommand(byte command, /*Nullable*/ byte[] data) throws IOException {
         sendCommand(command, data, true);
@@ -78,9 +91,27 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
             if (singleWrite) {
                 spiDevice.write(data, data.length);
             } else {
-                for (byte b : data) {
-                    spiDevice.write(new byte[]{b}, 1);
+                Log.d("Display Hat", "Starting sending data");
+                final long l = System.currentTimeMillis();
+
+                final int chunkSize = 4096;
+
+                if (data.length < chunkSize) {
+                    spiDevice.write(data, data.length);
+                } else {
+                    final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+
+                    while(inputStream.available() > 0) {
+                        byte[] buffer = new byte[chunkSize];
+                        final int readBytes = inputStream.read(buffer, 0, chunkSize);
+                        if (readBytes != chunkSize) {
+                            buffer = Arrays.copyOf(buffer, readBytes);
+                        }
+                        spiDevice.write(buffer, buffer.length);
+                    }
+                    inputStream.close();
                 }
+                Log.d("Display Hat", "Finished sending data. Took " + (System.currentTimeMillis() - l) + " ms");
             }
         }
     }

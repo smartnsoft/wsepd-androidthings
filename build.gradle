@@ -32,7 +32,7 @@ ext {
     ]
     mavenGroupId = "com.smartnsoft.androidthings"
     mavenArtifactId = "epaper-hat-driver"
-    mavenArtifactVersion = "0.0.3-SNAPSHOT"
+    mavenArtifactVersion = "0.0.5-SNAPSHOT"
     mavenDescription = "Android Things driver for Waveshare e-paper display modules using the e-Paper HAT, like the 7.5\" display."
     projectGitHubUrl = "https://github.com/smartnsoft/wsepd-androidthings"
 }
