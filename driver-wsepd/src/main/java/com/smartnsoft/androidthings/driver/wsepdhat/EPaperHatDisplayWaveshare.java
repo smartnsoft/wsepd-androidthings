@@ -56,16 +56,28 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     private PixelBuffer pixelBuffer;
     private ImageConverter imageConverter;
+    private boolean shouldSleepAfterDisplay = true;
 
     EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation) throws IOException {
+        this(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation, true);
+    }
+
+    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation, boolean shoudldSleepAfterDisplay) throws IOException {
         super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation);
         pixelBuffer = new PixelBuffer(deviceType, orientation);
         imageConverter = new ImageConverter(deviceType, orientation);
+        shoudldSleepAfterDisplay = shouldSleepAfterDisplay;
     }
 
     @Override
     public void clear() {
         Arrays.fill(buffer, PixelBuffer.WHITE_PIXEL_GROUP_BYTE);
+    }
+
+    @Override
+    public boolean shouldSleepAfterDisplay()
+    {
+        return shouldSleepAfterDisplay;
     }
 
     @Override
@@ -96,14 +108,18 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     public void refresh() throws IOException {
-        turnDisplayOn();
-        busyWait();
+        if (shouldSleepAfterDisplay()) {
+            turnDisplayOn();
+            busyWait();
+        }
         sendCommand(DATA_START_TRANSMISSION_1, buffer, false);
         sendCommand(DATA_STOP);
         sendCommand(DISPLAY_REFRESH);
         sleep(100);
         busyWait();
-        turnDisplayOff();
+        if (shouldSleepAfterDisplay()) {
+            turnDisplayOff();
+        }
     }
 
     @Override
