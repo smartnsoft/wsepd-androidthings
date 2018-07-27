@@ -38,11 +38,15 @@ display.refresh();
 display.close();
 ```
 
-### Hardware supported
-- [Waveshare 7.5inch e-Paper Module (A)][EPD7X5A_wiki]
-- [Waveshare 7.5inch e-Paper Module (B)][EPD7X5B_wiki]
-- [Waveshare 7.5inch e-Paper Module (C)][EPD7X5C_wiki]
-- [Waveshare 5.83inch e-Paper Module (A)][EPD5X8A_wiki]
+### Hardware compatible
+|                        Device                         | Color  type | Tested |
+|:-----------------------------------------------------:|:-----------:|:------:|
+| [Waveshare 7.5inch e-Paper Module (A)][EPD7X5A_wiki]  |     B&W     |   Yes  |
+| [Waveshare 7.5inch e-Paper Module (B)][EPD7X5B_wiki]  |  B&W  +Red  |   Yes  |
+| [Waveshare 7.5inch e-Paper Module (C)][EPD7X5C_wiki]  | B&W +Yellow |   Yes  |
+| [Waveshare 5.83inch e-Paper Module (A)][EPD5X8A_wiki] |     B&W     |   Yes  |
+| [Waveshare 5.83inch e-Paper Module (B)][EPD5X8B_wiki] |  B&W  +Red  |   No   |
+| [Waveshare 5.83inch e-Paper Module (C)][EPD5X8C_wiki] | B&W +Yellow |   No   |
 
 ### Hardware connection
 
@@ -75,5 +79,7 @@ This Android Things driver for the Waveshare ePaper HAT was proudly made at [Sma
 [EPD7X5B_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
 [EPD7X5C_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(C)
 [EPD5X8A_wiki]: https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT
+[EPD5X8B_wiki]: https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT_(B)
+[EPD5X8C_wiki]: https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT_(C)
 [inkyphat]: https://www.novoda.com/blog/porting-a-python-library-to-android-things-the-inkyphat/
 [wsepd]: https://github.com/Nilhcem/wsepd-androidthings
