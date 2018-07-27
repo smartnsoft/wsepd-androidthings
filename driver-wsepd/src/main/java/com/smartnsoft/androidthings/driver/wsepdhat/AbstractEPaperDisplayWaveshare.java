@@ -1,15 +1,14 @@
 package com.smartnsoft.androidthings.driver.wsepdhat;
 
+import android.util.Log;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
-
-import android.util.Log;
 
 abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
@@ -35,30 +34,42 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
         buffer = createBuffer();
 
-        spiDevice.setMode(SpiDevice.MODE0);
-        spiDevice.setFrequency(2_000_000); // max speed: 2MHz
-        spiDevice.setBitsPerWord(8);
-        spiDevice.setBitJustification(SpiDevice.BIT_JUSTIFICATION_MSB_FIRST); // MSB first
-        spiDevice.setCsChange(false);
+        try {
+            spiDevice.setMode(SpiDevice.MODE0);
+            spiDevice.setFrequency(2_000_000); // max speed: 2MHz
+            spiDevice.setBitsPerWord(8);
+            spiDevice.setBitJustification(SpiDevice.BIT_JUSTIFICATION_MSB_FIRST); // MSB first
+            spiDevice.setCsChange(false);
 
-        busyGpio.setDirection(Gpio.DIRECTION_IN);
-        busyGpio.setActiveType(Gpio.ACTIVE_HIGH);
+            busyGpio.setDirection(Gpio.DIRECTION_IN);
+            busyGpio.setActiveType(Gpio.ACTIVE_HIGH);
 
-        rstGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
-        rstGpio.setActiveType(Gpio.ACTIVE_HIGH);
+            rstGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
+            rstGpio.setActiveType(Gpio.ACTIVE_HIGH);
 
-        dcGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-        dcGpio.setActiveType(Gpio.ACTIVE_HIGH);
+            dcGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+            dcGpio.setActiveType(Gpio.ACTIVE_HIGH);
+        } catch (IOException | RuntimeException exception) {
+            try {
+                close();
+            } catch (IOException | RuntimeException ignored) {
+            }
+            throw exception;
+        }
 
         init();
     }
 
     @Override
     public void close() throws IOException {
-        spiDevice.close();
-        busyGpio.close();
-        rstGpio.close();
-        dcGpio.close();
+        try {
+            spiDevice.close();
+            busyGpio.close();
+            rstGpio.close();
+            dcGpio.close();
+        } catch (IOException e) {
+            throw new IOException("Some connections cannot be closed, you may experience errors on next launch.", e);
+        }
     }
 
     protected abstract void init() throws IOException;
@@ -67,10 +78,8 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
 
     protected abstract boolean isBusy() throws IOException;
 
-    protected void busyWait() throws IOException
-    {
-        while (isBusy())
-        {
+    protected void busyWait() throws IOException {
+        while (isBusy()) {
             sleep(100);
         }
     }
@@ -101,7 +110,7 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
                 } else {
                     final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
 
-                    while(inputStream.available() > 0) {
+                    while (inputStream.available() > 0) {
                         byte[] buffer = new byte[chunkSize];
                         final int readBytes = inputStream.read(buffer, 0, chunkSize);
                         if (readBytes != chunkSize) {

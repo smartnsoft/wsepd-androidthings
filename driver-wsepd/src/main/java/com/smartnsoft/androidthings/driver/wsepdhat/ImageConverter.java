@@ -1,6 +1,9 @@
 package com.smartnsoft.androidthings.driver.wsepdhat;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.Size;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;

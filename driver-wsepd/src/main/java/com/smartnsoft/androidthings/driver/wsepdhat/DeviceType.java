@@ -1,6 +1,7 @@
 package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.util.Size;
+
 import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
 public final class DeviceType {

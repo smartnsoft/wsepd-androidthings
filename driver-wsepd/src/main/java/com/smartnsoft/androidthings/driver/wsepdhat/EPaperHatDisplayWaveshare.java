@@ -75,8 +75,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     @Override
-    public boolean shouldSleepAfterDisplay()
-    {
+    public boolean shouldSleepAfterDisplay() {
         return shouldSleepAfterDisplay;
     }
 

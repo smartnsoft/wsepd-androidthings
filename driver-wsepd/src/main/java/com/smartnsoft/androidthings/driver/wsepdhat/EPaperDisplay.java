@@ -17,6 +17,7 @@ public interface EPaperDisplay extends AutoCloseable {
     /**
      * Boolean value that allows the integrator to choose whether to turn off the display aftere each refresh of the
      * screen to save some battery.
+     *
      * @return true if the display turns off after each refresh
      */
     boolean shouldSleepAfterDisplay();

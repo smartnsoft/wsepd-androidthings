@@ -1,0 +1,48 @@
+{
+  "title": "Android Things ePaper HAT Driver",
+  "category": "E-Paper Display",
+  "samples": ["https://github.com/smartnsoft/wsepd-androidthings/tree/master/sample"],
+  "published-maven": {
+    "maven-url": "https://jcenter.bintray.com",
+    "groupid": "com.smartnsoft.androidthings",
+    "artifactid": "epaper-hat-driver"
+  },
+  "compatible-with": [
+      {
+        "title": "Waveshare 7.5inch e-Paper Module (A)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/7.5inch-e-paper-hat-A.jpg",
+        "url": "https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT",
+        "notes": "Tested"
+      },
+      {
+        "title": "Waveshare 7.5inch e-Paper Module (B)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/7.5inch-e-paper-hat-B.jpg",
+        "url": "https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)",
+        "notes": "Tested"
+      },
+      {
+        "title": "Waveshare 7.5inch e-Paper Module (C)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/7.5inch-e-paper-hat-C.jpg",
+        "url": "https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(C)",
+        "notes": "Tested"
+      },
+      {
+        "title": "Waveshare 5.83inch e-Paper Module (A)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/5.83inch-e-paper-hat-A",
+        "url": "https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT",
+        "notes": "Tested"
+      },
+      {
+        "title": "Waveshare 5.83inch e-Paper Module (B)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/5.83inch-e-paper-hat-B.jpg",
+        "url": "https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT_(B)",
+        "notes": "Not yet tested"
+      },
+      {
+        "title": "Waveshare 5.83inch e-Paper Module (C)",
+        "photo": "https://github.com/smartnsoft/wsepd-androidthings/blob/master/assets/5.83inch-e-paper-hat-C.jpg",
+        "url": "https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT_(C)",
+        "notes": "Not yet tested"
+      }
+    ]
+  }

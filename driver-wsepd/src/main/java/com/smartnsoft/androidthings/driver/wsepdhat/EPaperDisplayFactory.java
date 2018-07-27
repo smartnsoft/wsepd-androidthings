@@ -17,8 +17,8 @@ public class EPaperDisplayFactory {
     }
 
     public static EPaperDisplay create(String spiName, String busyGpioName, String rstGpioName, String dcGpioName,
-        Preset deviceType, Orientation orientation, boolean shouldSleepAfterDisplay)
-        throws IOException {
+                                       Preset deviceType, Orientation orientation, boolean shouldSleepAfterDisplay)
+            throws IOException {
         final PeripheralManager manager = PeripheralManager.getInstance();
         final SpiDevice spiDevice = manager.openSpiDevice(spiName);
         final Gpio busyGpio = manager.openGpio(busyGpioName);
