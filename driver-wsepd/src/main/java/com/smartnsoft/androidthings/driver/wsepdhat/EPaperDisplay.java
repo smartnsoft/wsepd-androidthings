@@ -15,6 +15,13 @@ public interface EPaperDisplay extends AutoCloseable {
     void clear();
 
     /**
+     * Boolean value that allows the integrator to choose whether to turn off the display aftere each refresh of the
+     * screen to save some battery.
+     * @return true if the display turns off after each refresh
+     */
+    boolean shouldSleepAfterDisplay();
+
+    /**
      * Writes these colors in the screen buffer. If the array is smaller than what is needed by the
      * screen, white pixels will be used to fill missing ones. If the array is bigger, the maximum
      * amount of pixel will be displayed and discard the rest.
