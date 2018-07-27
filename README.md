@@ -12,13 +12,11 @@
 
 ```groovy
 dependencies {
-    compile 'com.smartnsoft.androidthings:epaper-hat-driver:0.0.1'
+    implementation 'com.smartnsoft.androidthings:epaper-hat-driver:0.1.0'
 }
 ```
 
 ## Usage
-
-*Tested on [Waveshare 7.5inch e-Paper Module (C)][module_wiki]*
 
 ```java
 // Access the EPD7X5C display
@@ -39,6 +37,12 @@ display.refresh();
 // Close the display when finished
 display.close();
 ```
+
+### Hardware supported
+- [Waveshare 7.5inch e-Paper Module (A)][EPD7X5A_wiki]
+- [Waveshare 7.5inch e-Paper Module (B)][EPD7X5B_wiki]
+- [Waveshare 7.5inch e-Paper Module (C)][EPD7X5C_wiki]
+- [Waveshare 5.83inch e-Paper Module (A)][EPD5X8A_wiki]
 
 ### Hardware connection
 
@@ -67,6 +71,9 @@ This SDK is under the MIT license.
 This Android Things driver for the Waveshare ePaper HAT was proudly made at [Smart&Soft](https://smartnsoft.com/), Paris FRANCE
 
 
-[module_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
+[EPD7X5A_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT
+[EPD7X5B_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(B)
+[EPD7X5C_wiki]: https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_(C)
+[EPD5X8A_wiki]: https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT
 [inkyphat]: https://www.novoda.com/blog/porting-a-python-library-to-android-things-the-inkyphat/
 [wsepd]: https://github.com/Nilhcem/wsepd-androidthings
