@@ -4,20 +4,19 @@ import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.SpiDevice;
 import com.smartnsoft.androidthings.driver.wsepdhat.DeviceType.Preset;
-import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
 import java.io.IOException;
 
 public class EPaperDisplayFactory {
 
     public static EPaperDisplay create(String spiName, String busyGpioName, String rstGpioName, String dcGpioName,
-                                       Preset deviceType, Orientation orientation)
+                                       Preset deviceType, @EPaperDisplay.ScreenOrientation int orientation)
             throws IOException {
         return EPaperDisplayFactory.create(spiName, busyGpioName, rstGpioName, dcGpioName, deviceType, orientation, true);
     }
 
     public static EPaperDisplay create(String spiName, String busyGpioName, String rstGpioName, String dcGpioName,
-                                       Preset deviceType, Orientation orientation, boolean shouldSleepAfterDisplay)
+                                       Preset deviceType, @EPaperDisplay.ScreenOrientation int orientation, boolean shouldSleepAfterDisplay)
             throws IOException {
         final PeripheralManager manager = PeripheralManager.getInstance();
         final SpiDevice spiDevice = manager.openSpiDevice(spiName);

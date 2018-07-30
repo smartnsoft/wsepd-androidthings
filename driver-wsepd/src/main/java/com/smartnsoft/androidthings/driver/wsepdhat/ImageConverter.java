@@ -7,21 +7,16 @@ import android.graphics.Typeface;
 import android.util.Size;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation.LANDSCAPE;
 
 public class ImageConverter {
 
-    public enum Orientation {
-        PORTRAIT, LANDSCAPE
-    }
-
     private final Size displaySize;
     private final DeviceType specs;
-    private final Orientation orientation;
+    private final int orientation;
     private final ImageScaler imageScaler;
     private final ColorConverter colorConverter;
 
-    ImageConverter(DeviceType specs, Orientation orientation) {
+    ImageConverter(DeviceType specs, @EPaperDisplay.ScreenOrientation int orientation) {
         this.orientation = orientation;
         this.specs = specs;
         this.imageScaler = new ImageScaler();
@@ -29,7 +24,7 @@ public class ImageConverter {
         this.displaySize = specs.getScreenSize();
     }
 
-    PaletteImage convertImage(Bitmap input, ImageScaler.Scale scale) {
+    PaletteImage convertImage(Bitmap input, @ImageScaler.ScaleType int scale) {
         return translateImage(filterImage(input, scale));
     }
 
@@ -45,11 +40,11 @@ public class ImageConverter {
         return new PaletteImage(colors, width);
     }
 
-    Bitmap filterImage(Bitmap sourceBitmap, ImageScaler.Scale scale) {
+    Bitmap filterImage(Bitmap sourceBitmap, @ImageScaler.ScaleType int scale) {
         return scaleToScreenBounds(sourceBitmap, scale);
     }
 
-    private Bitmap scaleToScreenBounds(Bitmap sourceBitmap, ImageScaler.Scale scale) {
+    private Bitmap scaleToScreenBounds(Bitmap sourceBitmap, @ImageScaler.ScaleType int scale) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (bitmapWidth <= getOrientatedWidth() && bitmapHeight <= getOrientatedHeight()) {
@@ -57,9 +52,9 @@ public class ImageConverter {
         }
 
         switch (scale) {
-            case FIT_XY:
+            case ImageScaler.FIT_XY:
                 return imageScaler.fitXY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
-            case FIT_X_OR_Y:
+            case ImageScaler.FIT_X_OR_Y:
                 return imageScaler.fitXorY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
             default:
                 throw new IllegalStateException("Unsupported scale type of " + scale);
@@ -67,27 +62,27 @@ public class ImageConverter {
     }
 
     private int getOrientatedWidth() {
-        return isIn(LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
+        return isIn(EPaperDisplay.ORIENTATION_LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
     }
 
     private int getOrientatedHeight() {
-        return isIn(LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
+        return isIn(EPaperDisplay.ORIENTATION_LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
     }
 
-    private boolean isIn(Orientation orientation) {
+    private boolean isIn(@EPaperDisplay.ScreenOrientation int orientation) {
         return this.orientation == orientation;
     }
 
     public PaletteImage convertText(String text, int maxTextSize, int color) {
-        return convertImage(textAsBitmap(text, maxTextSize, color), ImageScaler.Scale.FIT_X_OR_Y);
+        return convertImage(textAsBitmap(text, maxTextSize, color), ImageScaler.FIT_X_OR_Y);
     }
 
     public PaletteImage convertText(TextWrapper text) {
-        return convertImage(textAsBitmap(text.text, text.textSize, text.textColor), ImageScaler.Scale.FIT_X_OR_Y);
+        return convertImage(textAsBitmap(text.text, text.textSize, text.textColor), ImageScaler.FIT_X_OR_Y);
     }
 
     public PaletteImage convertText(String text, int color) {
-        return convertImage(textAsBitmap(text, 20, color), ImageScaler.Scale.FIT_X_OR_Y);
+        return convertImage(textAsBitmap(text, 20, color), ImageScaler.FIT_X_OR_Y);
     }
 
     private Bitmap textAsBitmap(String text, float textSize, int textColor) {

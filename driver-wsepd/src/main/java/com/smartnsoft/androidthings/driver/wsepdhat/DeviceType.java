@@ -2,8 +2,6 @@ package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.util.Size;
 
-import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
-
 public final class DeviceType {
 
     public enum Preset {
@@ -82,12 +80,12 @@ public final class DeviceType {
         return new Size(xDot, yDot);
     }
 
-    public int getOrientatedWidth(Orientation orientation) {
-        return orientation == Orientation.LANDSCAPE ? xDot : yDot;
+    public int getOrientatedWidth(@EPaperDisplay.ScreenOrientation int orientation) {
+        return orientation == EPaperDisplay.ORIENTATION_LANDSCAPE ? xDot : yDot;
     }
 
-    public int getOrientatedHeight(Orientation orientation) {
-        return orientation == Orientation.LANDSCAPE ? yDot : xDot;
+    public int getOrientatedHeight(@EPaperDisplay.ScreenOrientation int orientation) {
+        return orientation == EPaperDisplay.ORIENTATION_LANDSCAPE ? yDot : xDot;
     }
 
 }

@@ -4,22 +4,29 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 class ImageScaler {
 
-    enum Scale {
-        /**
-         * Scale in width and height independently, so that sourceBitmap matches dst exactly.
-         * This may change the aspect ratio of the sourceBitmap.
-         */
-        FIT_XY,
-        /**
-         * Compute a scale that will maintain the original sourceBitmap aspect ratio,
-         * but will also ensure that sourceBitmap fits entirely inside the maxWidth & maxHeight.
-         * At least one axis (Width or Height) will fit exactly.
-         */
-        FIT_X_OR_Y
-    }
+    @Retention(SOURCE)
+    @IntDef({FIT_XY, FIT_X_OR_Y})
+    @interface ScaleType {}
+
+    /**
+     * Scale in width and height independently, so that sourceBitmap matches dst exactly.
+     * This may change the aspect ratio of the sourceBitmap.
+     */
+    public static final int FIT_XY = 0;
+    /**
+     * Compute a scale that will maintain the original sourceBitmap aspect ratio,
+     * but will also ensure that sourceBitmap fits entirely inside the maxWidth & maxHeight.
+     * At least one axis (Width or Height) will fit exactly.
+     */
+    public static final int FIT_X_OR_Y = 1;
 
     /**
      * Scale in width and height independently, so that sourceBitmap matches dst exactly.

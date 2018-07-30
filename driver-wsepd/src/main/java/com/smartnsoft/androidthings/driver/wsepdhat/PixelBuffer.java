@@ -5,8 +5,6 @@ import android.util.Size;
 
 import java.util.Arrays;
 
-import static com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation.LANDSCAPE;
-
 class PixelBuffer {
 
     static final byte WHITE_PIXEL_GROUP_BYTE = (byte) (PaletteImage.Palette.WHITE.getByteColor() << 4 | PaletteImage.Palette.WHITE.getByteColor());
@@ -15,7 +13,8 @@ class PixelBuffer {
 
     private final PaletteImage.Palette[][] pixelBuffer;
 
-    private final ImageConverter.Orientation orientation;
+    @EPaperDisplay.ScreenOrientation
+    private final int orientation;
 
     private final Size displaySize;
 
@@ -23,7 +22,7 @@ class PixelBuffer {
 
     private final int numberOfPixelRegions;
 
-    PixelBuffer(DeviceType specs, ImageConverter.Orientation orientation) {
+    PixelBuffer(DeviceType specs, @EPaperDisplay.ScreenOrientation int orientation) {
         this.orientation = orientation;
         this.specs = specs;
         this.displaySize = specs.getScreenSize();
@@ -59,7 +58,7 @@ class PixelBuffer {
             return;
         }
 
-        if (isIn(LANDSCAPE)) {
+        if (isIn(EPaperDisplay.ORIENTATION_LANDSCAPE)) {
             pixelBuffer[x][y] = color;
         } else {
             int localX = (displaySize.getWidth() - 1) - y;
@@ -70,14 +69,14 @@ class PixelBuffer {
     }
 
     private int getOrientatedWidth() {
-        return isIn(LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
+        return isIn(EPaperDisplay.ORIENTATION_LANDSCAPE) ? displaySize.getWidth() : displaySize.getHeight();
     }
 
     private int getOrientatedHeight() {
-        return isIn(LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
+        return isIn(EPaperDisplay.ORIENTATION_LANDSCAPE) ? displaySize.getHeight() : displaySize.getWidth();
     }
 
-    private boolean isIn(ImageConverter.Orientation orientation) {
+    private boolean isIn(@EPaperDisplay.ScreenOrientation int orientation) {
         return this.orientation == orientation;
     }
 

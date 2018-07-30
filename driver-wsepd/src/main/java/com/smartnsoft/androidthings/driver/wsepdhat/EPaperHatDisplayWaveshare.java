@@ -8,7 +8,6 @@ import android.view.View.MeasureSpec;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
-import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 import com.smartnsoft.androidthings.driver.wsepdhat.PaletteImage.Palette;
 
 import java.io.IOException;
@@ -58,11 +57,11 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     private ImageConverter imageConverter;
     private boolean shouldSleepAfterDisplay = true;
 
-    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation) throws IOException {
+    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, @EPaperDisplay.ScreenOrientation int orientation) throws IOException {
         this(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation, true);
     }
 
-    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation, boolean shouldSleepAfterDisplay) throws IOException {
+    EPaperHatDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, @EPaperDisplay.ScreenOrientation int orientation, boolean shouldSleepAfterDisplay) throws IOException {
         super(spiDevice, busyGpio, rstGpio, dcGpio, deviceType, orientation);
         pixelBuffer = new PixelBuffer(deviceType, orientation);
         imageConverter = new ImageConverter(deviceType, orientation);
@@ -87,7 +86,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
 
     @Override
     public void setPixels(@NonNull Bitmap bitmap) {
-        setPixels(imageConverter.convertImage(bitmap, ImageScaler.Scale.FIT_X_OR_Y), 0, 0);
+        setPixels(imageConverter.convertImage(bitmap, ImageScaler.FIT_X_OR_Y), 0, 0);
     }
 
     @Override
@@ -204,7 +203,7 @@ public class EPaperHatDisplayWaveshare extends AbstractEPaperDisplayWaveshare {
     }
 
     private Bitmap loadBitmapFromView(View view) {
-        if (screenOrientation == Orientation.PORTRAIT) {
+        if (screenOrientation == EPaperDisplay.ORIENTATION_PORTRAIT) {
             view.setRotation(90f);
         }
         final int specWidth = MeasureSpec.makeMeasureSpec(specs.getOrientatedWidth(screenOrientation), MeasureSpec.EXACTLY);

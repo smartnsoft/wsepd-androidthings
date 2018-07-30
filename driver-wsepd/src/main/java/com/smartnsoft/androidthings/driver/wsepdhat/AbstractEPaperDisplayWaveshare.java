@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
-import com.smartnsoft.androidthings.driver.wsepdhat.ImageConverter.Orientation;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,11 +19,12 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
     protected final Gpio rstGpio;
     protected final Gpio dcGpio;
     protected final DeviceType specs;
-    protected final Orientation screenOrientation;
+    @EPaperDisplay.ScreenOrientation
+    protected final int screenOrientation;
 
     protected final byte[] buffer;
 
-    AbstractEPaperDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, Orientation orientation) throws IOException {
+    AbstractEPaperDisplayWaveshare(SpiDevice spiDevice, Gpio busyGpio, Gpio rstGpio, Gpio dcGpio, DeviceType deviceType, @EPaperDisplay.ScreenOrientation int orientation) throws IOException {
         this.spiDevice = spiDevice;
         this.busyGpio = busyGpio;
         this.rstGpio = rstGpio;
@@ -50,9 +50,11 @@ abstract class AbstractEPaperDisplayWaveshare implements EPaperDisplay {
             dcGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
             dcGpio.setActiveType(Gpio.ACTIVE_HIGH);
         } catch (IOException | RuntimeException exception) {
+            Log.e(AbstractEPaperDisplayWaveshare.class.getSimpleName(), "Unable to create a EPaperDisplayWaveshare instance", exception);
             try {
                 close();
             } catch (IOException | RuntimeException ignored) {
+                Log.e(AbstractEPaperDisplayWaveshare.class.getSimpleName(), "Unable to close all devices", ignored);
             }
             throw exception;
         }

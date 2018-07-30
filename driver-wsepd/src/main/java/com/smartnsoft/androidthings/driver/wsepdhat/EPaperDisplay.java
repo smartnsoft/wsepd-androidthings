@@ -1,12 +1,22 @@
 package com.smartnsoft.androidthings.driver.wsepdhat;
 
 import android.graphics.Bitmap;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public interface EPaperDisplay extends AutoCloseable {
+
+    @Retention(SOURCE)
+    @IntDef({ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE})
+    @interface ScreenOrientation {}
+    int ORIENTATION_PORTRAIT = 0;
+    int ORIENTATION_LANDSCAPE = 1;
 
     /**
      * Clears the display buffer in the driver. You still have to call {@link #refresh()} after that to get an
